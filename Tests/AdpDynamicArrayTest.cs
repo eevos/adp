@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Algorithms;
 using Xunit;
 
 namespace Tests;
-
 public class UnitTest1
 {
     [Theory]
@@ -84,5 +81,31 @@ public class UnitTest1
         var sut = new AdpDynamicArray<int>();
         sut.Clear();
         Assert.Equal(0, sut.Count());
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Contains_ShouldReturnTrue_WhenItemIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        Assert.True(sut.Contains("hello"));
+    }
+
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void IndexOf_ShouldReturnCorrectIndex_WhenItemIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+
+        Assert.Equal(3, sut.IndexOf("hello"));
     }
 }

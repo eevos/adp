@@ -55,48 +55,16 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 
     public bool Contains(T item)
     {
-        throw new NotImplementedException();
+        return items.Contains(item);
     }
-
-    public void CopyTo(T[] array, int arrayIndex)
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool Remove(T item)
-    {
-        throw new NotImplementedException();
-    }
-
 
     public int IndexOf(T item)
     {
-        throw new NotImplementedException();
+        return Array.IndexOf(items, item);
     }
-
-    public void Insert(int index, T item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void RemoveAt(int index)
-    {
-        throw new NotImplementedException();
-    }
-
     public T this[int index]
     {
         get => items[index];
-        set => throw new NotImplementedException();
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        throw new NotImplementedException();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+        set => items[index] = value;
     }
 }
