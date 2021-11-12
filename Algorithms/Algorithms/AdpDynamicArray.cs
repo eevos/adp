@@ -7,6 +7,11 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 {
     T[] items;
 
+    public int Count()
+    {
+        return items.Length;
+    }
+
     public AdpDynamicArray()
     {
         items = Array.Empty<T>();
@@ -15,9 +20,10 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
     public AdpDynamicArray(int capacity)
     {
         items = new T[capacity];
+        var test = new List<int>();
     }
 
-    public void Add(T item)
+    public void Push(T item)
     {
         var newItems = new T[items.Length + 1];
         for (var i = 0; i < items.Length; i++)
@@ -29,9 +35,22 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         items = newItems;
     }
 
+    public T Pop()
+    {
+        var item = items[^1];
+        var newItems = new T[items.Length - 1];
+        for (var i = 0; i < newItems.Length; i++)
+        {
+            newItems[i] = items[i];
+        }
+
+        items = newItems;
+        return item;
+    }
+
     public void Clear()
     {
-        throw new NotImplementedException();
+        items = Array.Empty<T>();
     }
 
     public bool Contains(T item)
@@ -49,8 +68,6 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         throw new NotImplementedException();
     }
 
-    public int Count { get; }
-    public bool IsReadOnly { get; }
 
     public int IndexOf(T item)
     {
@@ -71,5 +88,15 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
     {
         get => items[index];
         set => throw new NotImplementedException();
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        throw new NotImplementedException();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
