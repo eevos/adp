@@ -14,5 +14,9 @@ public interface IAdpDynamicArray<T>
 
     public int IndexOf(T item);
 
+    public void Insert(int index, T item);
+    public bool Remove(T item);
+    public bool RemoveAt(int index);
+
     public T this[int index] { get; set; }
 }

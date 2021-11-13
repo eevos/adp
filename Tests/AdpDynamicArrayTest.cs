@@ -75,10 +75,15 @@ public class UnitTest1
         Assert.Equal(values[^1], sut.Pop());
     }
 
-    [Fact]
-    public void Clear_ShouldBeEmpty_WhenEmpty()
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Clear_ShouldBeEmpty_WhenCleared(params string[] values)
     {
-        var sut = new AdpDynamicArray<int>();
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
         sut.Clear();
         Assert.Equal(0, sut.Count());
     }
@@ -98,7 +103,76 @@ public class UnitTest1
 
     [Theory]
     [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void IndexOf_ShouldReturnCorrectIndex_WhenItemIsInArray(params string[] values)
+    public void Contains_ShouldReturnFalse_WhenItemIsNotInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        Assert.False(sut.Contains("hello2"));
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Insert_ShouldInsertItem_WhenItemIsInserted(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        sut.Insert(2, "hello2");
+        Assert.Equal("hello2", sut[2]);
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Insert_ShouldNotAffectOtherItems_WhenItemIsInserted(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        sut.Insert(2, "hello2");
+        Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
+    }
+    
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Remove_ShouldReturnTrue_WhenItemIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        Assert.True(sut.Remove("hello"));
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Remove_ShouldRemoveItem_WhenItemIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        sut.Remove("hello");
+        Assert.False(sut.Contains("hello"));
+    }
+
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Remove_CheckCountMinus1_WhenItemIsRemoved(params string[] values)
     {
         var sut = new AdpDynamicArray<string>();
         foreach (var value in values)
@@ -106,6 +180,48 @@ public class UnitTest1
             sut.Push(value);
         }
 
-        Assert.Equal(3, sut.IndexOf("hello"));
+        sut.Remove("hello");
+        Assert.Equal(values.Length - 1, sut.Count());
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void Remove_ShouldNotEffectOtherItems_WhenItemIsRemoved(params string[] values)
+    {
+            var sut = new AdpDynamicArray<string>();
+            foreach (var value in values)
+            {
+                sut.Push(value);
+            }
+
+            sut.Remove(values[^2]);
+            Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void RemoveAt_ShouldReturnTrue_WhenIndexIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        Assert.True(sut.RemoveAt(2));
+    }
+    
+    [Theory]
+    [InlineData("donald", "ninja", "dude", "hello", "world")]
+    public void RemoveAt_ShouldRemoveItem_WhenIndexIsInArray(params string[] values)
+    {
+        var sut = new AdpDynamicArray<string>();
+        foreach (var value in values)
+        {
+            sut.Push(value);
+        }
+        
+        sut.RemoveAt(2);
+        Assert.False(sut.Contains(values[2]));
     }
 }

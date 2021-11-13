@@ -62,6 +62,55 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
     {
         return Array.IndexOf(items, item);
     }
+
+    public void Insert(int index, T item)
+    {
+        var newItems = new T[items.Length + 1];
+
+        var j = 0;
+        for (var i = 0; i < newItems.Length; i++)
+        {
+            if (i == index)
+            {
+                newItems[i] = item;
+                continue;
+            }
+
+            newItems[i] = items[j];
+            j++;
+        }
+
+        items = newItems;
+    }
+
+    public bool Remove(T item)
+    {
+        var index = IndexOf(item);
+        if (index >= 0)
+        {
+            return RemoveAt(index);
+        }
+
+        return false;
+    }
+
+    public bool RemoveAt(int index)
+    {
+        var newItems = new T[items.Length - 1];
+
+        var j = 0;
+        for (var i = 0; i < items.Length; i++)
+        {
+            if (i == index) continue;
+
+            newItems[j] = items[i];
+            j++;
+        }
+
+        items = newItems;
+        return true;
+    }
+
     public T this[int index]
     {
         get => items[index];
