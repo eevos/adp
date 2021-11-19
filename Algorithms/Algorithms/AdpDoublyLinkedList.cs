@@ -47,12 +47,13 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
     {
         return items.Contains(item);
     }
-    
+
     public void Push(T itemToAdd)
     {
         var node = new LinkedListNode<T>(itemToAdd);
         items.AddFirst(node);
     }
+
     public void Push(T[] itemsToAdd)
     {
         for (var i = 0; i < itemsToAdd.Length; i++)
@@ -61,6 +62,7 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
             this.items.AddFirst(node);
         }
     }
+
     public int IndexOf(T item)
     {
         throw new NotImplementedException();
@@ -68,7 +70,23 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
 
     public void Insert(int index, T item)
     {
-        throw new NotImplementedException();
+        if (index == 0)
+        {
+            var firstNode = items.First;
+            items.AddBefore(firstNode, item);
+        }
+        else
+        {
+            var node = items.First;
+            for (int i = 0; i < index + 1; i++)
+            {
+                if (i == index)
+                {
+                    items.AddAfter(node.Previous, item);
+                }
+                node = node.Next;
+            }
+        }
     }
 
     public bool Remove(T item)
