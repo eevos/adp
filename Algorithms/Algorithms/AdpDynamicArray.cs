@@ -111,6 +111,11 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         return true;
     }
 
+    public T[] ToArray()
+    {
+        return items;
+    }
+
     public T this[int index]
     {
         get => items[index];
