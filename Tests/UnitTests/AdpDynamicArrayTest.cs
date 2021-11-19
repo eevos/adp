@@ -1,120 +1,83 @@
 using System;
+using System.Data;
 using Algorithms;
+using Algorithms.Interfaces;
 using Tests.DataSets;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests.UnitTests;
 
-public class AdpDynamicArrayTest
+public class AdpDynamicArrayTest : IClassFixture<DataSetLoader<DsSortDto>>
 {
     private readonly ITestOutputHelper _testOutputHelper;
+    private readonly DsSortDto _dataSet;
 
-    public AdpDynamicArrayTest(ITestOutputHelper testOutputHelper)
+    public AdpDynamicArrayTest(ITestOutputHelper testOutputHelper, DataSetLoader<DsSortDto> dataSetLoader)
     {
         _testOutputHelper = testOutputHelper;
-    }
-
-
-    [Theory]
-    [InlineData(1)]
-    [InlineData(1.2)]
-    [InlineData('c')]
-    [InlineData("test")]
-    public void Push_AddItem_WhenEmpty<T>(T value)
-    {
-        var sut = new AdpDynamicArray<T>();
-        sut.Push(value);
-        Assert.Equal(value, sut[0]);
-    }
-
-    [Fact]
-    public void Push_AddItem_WithDataSet()
-    {
-        
-        
-        var sut = new AdpDynamicArray<string>();
-        sut.Push("test");
-        sut.Push("test");
-        Assert.Equal("test", sut[1]);
+        _dataSet = dataSetLoader.DataSet;
     }
     
     [Theory]
-    [ClassData(typeof(DataSetLoader<DSSortDto>))]
-    public void Push_CheckFirstItemIsCorrect_WhenMultipleItemsArePushed(params object[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Push_CheckIfItemsAreEqual_WhenMultipleItemsArePushed<T>(T[] values)
     {
-        if (values.Length == 0)
-        {
-            return;
-        }
-        
-        var sut = new AdpDynamicArray<object>();
-
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
-        
-        _testOutputHelper.WriteLine(sut[0].ToString());
-
-        Assert.Equal(values[0], sut[0] );
-    }
-
-    [Theory]
-    [ClassData(typeof(DataSetLoader<DSSortDto>))]
-    public void Push_CheckLastItemIsCorrect_WhenMultipleItemsArePushed(params object[] values)
-    {
-        if (values.Length == 0)
-        {
-            return;
-        }
-        
-        var sut = new AdpDynamicArray<object>();
+        var sut = new AdpDynamicArray<T>();
 
         foreach (var value in values)
         {
             sut.Push(value);
         }
 
-        _testOutputHelper.WriteLine(sut[sut.Count() - 1].ToString());
-
-        Assert.Equal(values[^1], sut[sut.Count() - 1]);
+        Assert.Equal(values, sut.ToArray());
     }
 
 
     [Theory]
-    [InlineData(1, 2, 3)]
-    public void Pop_CheckCountMinus1_WhenLastItemIsRemoved(params int[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Pop_CheckCountMinus1_WhenLastItemIsRemoved<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<int>();
+        var sut = new AdpDynamicArray<T>();
         foreach (var value in values)
         {
             sut.Push(value);
+        }
+
+        if (values.Length == 0)
+        {
+            Assert.Throws<IndexOutOfRangeException>(() => sut.Pop());
+            return;
         }
 
         sut.Pop();
-
         Assert.Equal(values.Length - 1, sut.Count());
     }
 
     [Theory]
-    [InlineData(1, 2, 3)]
-    public void Pop_CheckLastItemIsReturned(params int[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Pop_CheckLastItemIsReturned(params object[] values)
     {
-        var sut = new AdpDynamicArray<int>();
+        var sut = new AdpDynamicArray<object>();
         foreach (var value in values)
         {
             sut.Push(value);
         }
-
+        
+        if (values.Length == 0)
+        {
+            Assert.Throws<IndexOutOfRangeException>(() => sut.Pop());
+            return;
+        }
+    
         Assert.Equal(values[^1], sut.Pop());
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Clear_ShouldBeEmpty_WhenCleared(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Clear_ShouldBeEmpty_WhenCleared<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
+        var sut = new AdpDynamicArray<T>();
         foreach (var value in values)
         {
             sut.Push(value);
