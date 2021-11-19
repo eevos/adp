@@ -2,7 +2,7 @@
 
 namespace Algorithms.Algorithms;
 
-public class AdpDoublyLinkedList<T>: IAdpDoublyLinkedList<T>
+public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
 {
     private LinkedList<T> items;
 
@@ -10,7 +10,7 @@ public class AdpDoublyLinkedList<T>: IAdpDoublyLinkedList<T>
     {
         this.items = new();
     }
-    
+
     public AdpDoublyLinkedList(T[] inputItems)
     {
         this.items = new LinkedList<T>(inputItems);
@@ -18,8 +18,12 @@ public class AdpDoublyLinkedList<T>: IAdpDoublyLinkedList<T>
 
     public int Count()
     {
+        if (items.Count == 0)
+        {
+            return 0;
+        }
+
         var teller = 0;
-        
         var node = items.First;
         teller++;
         while (node.Next != null)
@@ -27,29 +31,36 @@ public class AdpDoublyLinkedList<T>: IAdpDoublyLinkedList<T>
             teller++;
             node = node.Next;
         }
+
         return teller;
-    }
-
-    public void Push(T item)
-    {
-        throw new NotImplementedException();
-    }
-
-    public T Pop()
-    {
-        throw new NotImplementedException();
     }
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        while (items.First != null)
+        {
+            items.RemoveFirst();
+        }
     }
 
     public bool Contains(T item)
     {
-        throw new NotImplementedException();
+        return items.Contains(item);
     }
-
+    
+    public void Push(T itemToAdd)
+    {
+        var node = new LinkedListNode<T>(itemToAdd);
+        items.AddFirst(node);
+    }
+    public void Push(T[] itemsToAdd)
+    {
+        for (var i = 0; i < itemsToAdd.Length; i++)
+        {
+            var node = itemsToAdd[i];
+            this.items.AddFirst(node);
+        }
+    }
     public int IndexOf(T item)
     {
         throw new NotImplementedException();
