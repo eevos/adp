@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using Xunit;
 
 namespace Tests.DataSets;
 
@@ -14,9 +13,9 @@ public class DataSetLoader<T> : IEnumerable<object[]>
     public DataSetLoader()
     {
         var workingDirectory = Environment.CurrentDirectory;
-        var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;
+        var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent?.FullName;
         if (projectDirectory == null) throw new Exception("Could not find project directory");
-        var dataSetDirectory = Path.Combine(projectDirectory, "DataSets");
+        var dataSetDirectory = Path.Combine(projectDirectory, "Algorithms/DataSets");
 
         var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
 
