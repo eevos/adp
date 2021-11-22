@@ -2,10 +2,10 @@
 
 namespace Algorithms.Interfaces;
 
-public interface IAdpDynamicArray<T>
+public interface IAdpDynamicArray<T> : IEnumerable<T>
 {
     public int Count();
-    public void Push(T item);
+    public void Add(T item);
     public T Pop();
 
     public void Clear();

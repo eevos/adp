@@ -22,8 +22,13 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         items = new T[capacity];
         var test = new List<int>();
     }
+    
+    public AdpDynamicArray(IEnumerable<T> collection)
+    {
+        items = collection.ToArray();
+    }
 
-    public void Push(T item)
+    public void Add(T item)
     {
         var newItems = new T[items.Length + 1];
         for (var i = 0; i < items.Length; i++)
@@ -32,6 +37,22 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         }
 
         newItems[^1] = item;
+        items = newItems;
+    }
+    
+    public void Add(T[] collection)
+    {
+        var newItems = new T[items.Length + collection.Length];
+        for (var i = 0; i < items.Length; i++)
+        {
+            newItems[i] = items[i];
+        }
+        
+        for (var i = 0; i < collection.Length; i++)
+        {
+            newItems[i + items.Length] = collection[i];
+        }
+
         items = newItems;
     }
 
@@ -120,5 +141,15 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
     {
         get => items[index];
         set => items[index] = value;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return ((IEnumerable<T>)items).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

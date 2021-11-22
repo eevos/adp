@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Algorithms;
 using Algorithms.Interfaces;
 using Tests.DataSets;
@@ -27,7 +29,7 @@ public class AdpDynamicArrayTest : IClassFixture<DataSetLoader<DsSortDto>>
 
         foreach (var value in values)
         {
-            sut.Push(value);
+            sut.Add(value);
         }
 
         Assert.Equal(values, sut.ToArray());
@@ -38,38 +40,19 @@ public class AdpDynamicArrayTest : IClassFixture<DataSetLoader<DsSortDto>>
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Pop_CheckCountMinus1_WhenLastItemIsRemoved<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<T>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
-
-        if (values.Length == 0)
-        {
-            Assert.Throws<IndexOutOfRangeException>(() => sut.Pop());
-            return;
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
         sut.Pop();
         Assert.Equal(values.Length - 1, sut.Count());
     }
-
+    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    public void Pop_CheckLastItemIsReturned(params object[] values)
+    public void Pop_CheckLastItemIsReturned<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<object>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
-        
-        if (values.Length == 0)
-        {
-            Assert.Throws<IndexOutOfRangeException>(() => sut.Pop());
-            return;
-        }
-    
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
         Assert.Equal(values[^1], sut.Pop());
     }
 
@@ -77,151 +60,153 @@ public class AdpDynamicArrayTest : IClassFixture<DataSetLoader<DsSortDto>>
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Clear_ShouldBeEmpty_WhenCleared<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<T>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
-
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
+        
         sut.Clear();
         Assert.Equal(0, sut.Count());
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Contains_ShouldReturnTrue_WhenItemIsInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Contains_ShouldReturnTrue_WhenItemIsInArray<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        Assert.True(sut.Contains("hello"));
+        Assert.True(sut.Contains(values[^1]));
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Contains_ShouldReturnFalse_WhenItemIsNotInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Contains_ShouldReturnFalse_WhenItemIsNotInArray<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
-
-        Assert.False(sut.Contains("hello2"));
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
+        Assert.False(sut.Contains(GetValueForType<T>()));
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Insert_ShouldInsertItem_WhenItemIsInserted(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Insert_ShouldInsertItem_WhenItemIsInserted<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.Insert(2, "hello2");
-        Assert.Equal("hello2", sut[2]);
+        var value = GetValueForType<T>();
+        sut.Insert(1, value);
+        Assert.Equal(value, sut[1]);
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Insert_ShouldNotAffectOtherItems_WhenItemIsInserted(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Insert_ShouldNotAffectOtherItems_WhenItemIsInserted<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.Insert(2, "hello2");
+        var value = GetValueForType<T>();
+        sut.Insert(1, value);
         Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
     }
 
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Remove_ShouldReturnTrue_WhenItemIsInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Remove_ShouldReturnTrue_WhenItemIsInArray<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        Assert.True(sut.Remove("hello"));
+        Assert.True(sut.Remove(values[^1]));
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Remove_ShouldRemoveItem_WhenItemIsInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Remove_ShouldRemoveItem_WhenItemIsInArray<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.Remove("hello");
-        Assert.False(sut.Contains("hello"));
+        var value = GetValueForType<T>();
+        sut.Insert(1, value);
+
+        sut.Remove(value);
+        Assert.False(sut.Contains(value));
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Remove_CheckCountMinus1_WhenItemIsRemoved(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Remove_CheckCountMinus1_WhenItemIsRemoved<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.Remove("hello");
+        sut.Remove(values[^1]);
         Assert.Equal(values.Length - 1, sut.Count());
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void Remove_ShouldNotEffectOtherItems_WhenItemIsRemoved(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Remove_ShouldNotEffectOtherItems_WhenItemIsRemoved<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.Remove(values[^2]);
-        Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
+        var value = GetValueForType<T>();
+        sut.Insert(1, value);
+        sut.Remove(value);
+        
+        Assert.Equal(sut.ToArray(), values);
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void RemoveAt_ShouldReturnTrue_WhenIndexIsInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void RemoveAt_ShouldReturnTrue_WhenIndexIsInArray<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        Assert.True(sut.RemoveAt(2));
+        Assert.True(sut.RemoveAt(0));
     }
 
     [Theory]
-    [InlineData("donald", "ninja", "dude", "hello", "world")]
-    public void RemoveAt_ShouldRemoveItem_WhenIndexIsInArray(params string[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void RemoveAt_ShouldRemoveItem_WhenIndexIsInArray<T>(T[] values)
     {
-        Int64 index = 2;
-        var sut = new AdpDynamicArray<string>();
-        foreach (var value in values)
-        {
-            sut.Push(value);
-        }
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T>{values.ToArray()};
 
-        sut.RemoveAt(2);
-        Assert.False(sut.Contains(values[2]));
+        var value = GetValueForType<T>();
+        sut.Add(value);
+        
+        sut.RemoveAt(sut.Count() - 1);
+        Assert.False(sut.Contains(value));
+    }
+    
+    private static T GetValueForType<T>()
+    {
+        // switch with type
+        return typeof(T).Name switch
+        {
+            "Int32" => (T)Convert.ChangeType(9999999, typeof(T)),
+            "String" => (T)Convert.ChangeType("notInArray", typeof(T)),
+            "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
+            "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
+            "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
+            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))),
+            _ => throw new Exception("Type not supported")
+        };
+    }
+    
+    private static bool AssertIndexOutOfRangeWhenEmptyArray<T>(T[] values)
+    {
+        if (values.Length == 0)
+        {
+            Assert.Throws<IndexOutOfRangeException>(() => values[0]);
+            return true;
+        } 
+        
+        return false;
     }
 }

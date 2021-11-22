@@ -14,7 +14,8 @@ public class DataSetLoader<T> : IEnumerable<object[]>
     public DataSetLoader()
     {
         var workingDirectory = Environment.CurrentDirectory;
-        var projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+        var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.FullName;
+        if (projectDirectory == null) throw new Exception("Could not find project directory");
         var dataSetDirectory = Path.Combine(projectDirectory, "DataSets");
 
         var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
@@ -24,10 +25,10 @@ public class DataSetLoader<T> : IEnumerable<object[]>
 
     public IEnumerator<object[]> GetEnumerator()
     {
-        foreach (var property in DataSet.GetType().GetProperties())
+        var properties = typeof(T).GetProperties();
+        foreach (var property in properties)
         {
-            var value = property.GetValue(DataSet);
-            yield return new [] {value};
+            yield return new [] { property.GetValue(DataSet) };
         }
     }
 
