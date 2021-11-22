@@ -10,13 +10,32 @@ namespace Benchmarks.Benchmarks;
 public class AdpDynamicArrayBenchmarks
 {
     [Benchmark]
-    public void Add()
+    public void AddToAdpDynamicArray()
     {
         var array = new AdpDynamicArray<int>();
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 100; i++)
         {
             array.Add(i);
         }
     }
     
+    [Benchmark]
+    public void AddToAdpDynamicArrayStepSize1()
+    {
+        var array = new AdpDynamicArrayStepSize1<int>();
+        for (int i = 0; i < 100; i++)
+        {
+            array.Add(i);
+        }
+    }
+
+    [Benchmark]
+    public void AddToList()
+    {
+        var array = new List<int>();
+        for (int i = 0; i < 100; i++)
+        {
+            array.Add(i);
+        }
+    }
 }

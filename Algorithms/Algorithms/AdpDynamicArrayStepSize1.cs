@@ -3,97 +3,42 @@ using Algorithms.Interfaces;
 
 namespace Algorithms;
 
-public class AdpDynamicArray<T> : IAdpDynamicArray<T>
+public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
 {
-    T?[] items;
-    int size;
+    T[] items;
 
-    public int Capacity
-    {
-        get
-        {
-            return items.Length;
-        }
-    }
     public int Count()
     {
         return items.Length;
     }
 
-    public AdpDynamicArray()
+    public AdpDynamicArrayStepSize1()
     {
         items = Array.Empty<T>();
-        size = 0;
     }
 
-    public AdpDynamicArray(int capacity)
+    public AdpDynamicArrayStepSize1(int capacity)
     {
         items = new T[capacity];
-        size = capacity;
+        var test = new List<int>();
     }
     
-    public AdpDynamicArray(IEnumerable<T> collection)
+    public AdpDynamicArrayStepSize1(IEnumerable<T> collection)
     {
         items = collection.ToArray();
-        size = items.Length;
     }
 
     public void Add(T item)
     {
-        var newItems = items;
-        
-        if (items.Length == 0)
+        var newItems = new T[items.Length + 1];
+        for (var i = 0; i < items.Length; i++)
         {
-            newItems = new []{item};
-        }
-        else if (size == items.Length)
-        {
-            newItems = new T?[items.Length * 2];
-            for (int i = 0; i < items.Length; i++)
-            {
-                newItems[i] = items[i];
-            }
-            newItems[size] = item;
-        }
-        else
-        {
-            newItems[size] = item;
+            newItems[i] = items[i];
         }
 
-        size++;
+        newItems[^1] = item;
         items = newItems;
     }
-
-    
-    // public void Add(T item)
-    // {
-    //     var newItems = Resize(size + 1);
-    //
-    //     for (int i = 0; i < size; i++)
-    //     {
-    //         newItems[i] = items[i];
-    //     }
-    //
-    //     newItems[size] = item;
-    //     
-    //     size++;
-    //     items = newItems;
-    // }
-    
-    private T[] Resize(int newSize)
-    {
-        if (newSize >= items.Length)
-        {
-            return new T[newSize * 2];
-        }
-        if (newSize < items.Length/2 )
-        {
-            return new T[(int)Math.Ceiling((double)items.Length / 2)];
-        }
-        
-        return new T[newSize];
-    }
-    
     
     public void Add(T[] collection)
     {
@@ -189,15 +134,10 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 
     public T[] ToArray()
     {
-        var newItems = new T[size];
-        for (var i = 0; i < size; i++)
-        {
-            newItems[i] = items[i];
-        }
-        return newItems;
+        return items;
     }
 
-    public T? this[int index]
+    public T this[int index]
     {
         get => items[index];
         set => items[index] = value;
