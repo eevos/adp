@@ -105,6 +105,17 @@ public class AdpDynamicArrayTest
         Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
     }
 
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Insert_ShouldAdd1ToCount_WhenItemIsInserted<T>(T[] values)
+    {
+        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
+        var sut = new AdpDynamicArray<T> { values.ToArray() };
+
+        var value = GetValueForType<T>();
+        sut.Insert(1, value);
+        Assert.Equal(values.Length + 1, sut.Count());
+    }
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
@@ -124,7 +135,7 @@ public class AdpDynamicArrayTest
         var sut = new AdpDynamicArray<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
-        sut.Insert(1, value);
+        sut.Insert(0, value);
 
         sut.Remove(value);
         Assert.False(sut.Contains(value));
@@ -173,9 +184,9 @@ public class AdpDynamicArrayTest
         var sut = new AdpDynamicArray<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
-        sut.Add(value);
+        sut.Insert(0, value);
 
-        sut.RemoveAt(sut.Count() - 1);
+        sut.RemoveAt(0);
         Assert.False(sut.Contains(value));
     }
 

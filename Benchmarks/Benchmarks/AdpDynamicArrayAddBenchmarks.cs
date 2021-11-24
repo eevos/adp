@@ -7,7 +7,7 @@ namespace Benchmarks.Benchmarks;
 [MemoryDiagnoser]
 [Orderer(SummaryOrderPolicy.FastestToSlowest)]
 [RankColumn]
-public class AdpDynamicArrayBenchmarks
+public class AdpDynamicArrayAddBenchmarks
 {
     [Benchmark]
     public void AddToAdpDynamicArray()
