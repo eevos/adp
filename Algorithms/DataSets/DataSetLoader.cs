@@ -16,6 +16,7 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent?.FullName;
         if (projectDirectory == null) throw new Exception("Could not find project directory");
         var dataSetDirectory = Path.Combine(projectDirectory, "Algorithms/DataSets");
+        
 
         var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
 

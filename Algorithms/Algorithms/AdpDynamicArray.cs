@@ -94,6 +94,7 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 
     public bool RemoveAt(int index)
     {
+        Shrink(size - 1);
         Array.Copy(items, index + 1, items, index, size - index - 1);
         size--;
         return true;
@@ -131,6 +132,16 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         if (newSize >= items.Length)
         {
             var newItems = new T[newSize * 2];
+            Array.Copy(items, newItems, size);
+            items = newItems;
+        }
+    }
+    
+    private void Shrink(int newSize)
+    {
+        if (newSize < items.Length / 2)
+        {
+            var newItems = new T[(int)Math.Ceiling((double)items.Length / 2)];
             Array.Copy(items, newItems, size);
             items = newItems;
         }

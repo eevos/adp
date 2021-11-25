@@ -13,14 +13,14 @@ class Program
         //         .Create(DefaultConfig.Instance)
         //         .WithOptions(ConfigOptions.DontOverwriteResults ));
         
-        // BenchmarkRunner.Run<AdpDynamicArrayRemoveBenchmarks>
-        // ( ManualConfig
-        //     .Create(DefaultConfig.Instance)
-        //     .WithOptions(ConfigOptions.DontOverwriteResults ));
-        
-        BenchmarkRunner.Run<AdpDynamicArrayInsertBenchmarks>
+        BenchmarkRunner.Run<AdpDynamicArrayRemoveBenchmarks>
         ( ManualConfig
             .Create(DefaultConfig.Instance)
             .WithOptions(ConfigOptions.DontOverwriteResults ));
+        
+        // BenchmarkRunner.Run<AdpDynamicArrayInsertBenchmarks>
+        // ( ManualConfig
+        //     .Create(DefaultConfig.Instance)
+        //     .WithOptions(ConfigOptions.DontOverwriteResults ));
     }
 }
