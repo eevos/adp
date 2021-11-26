@@ -82,24 +82,24 @@ public class AdpDoublyLinkedList
     }
 
     [Theory]
-    [InlineData(1, 2, 3)]
-    [InlineData(1, 500, 3, 365)]
-    [InlineData(1, -500, 3, -365)]
-    public void Insert_Should_WhenItemInArray(params int[] values)
+    [InlineData(new [] {1 , 2, 3}, 4, 1)]
+    [InlineData(new [] {1 , 2, -365}, 5, 2)]
+    public void Insert_Should_WhenItemInArray(int[] values, int insertedValue, int insertOnIndex)
     {
         var actual = 999;
-        var insertedInt = 4;
-        var insertOnIndex = 1;
-        var expected = insertedInt;
+        var expected = insertedValue;
         var sut = new AdpDoublyLinkedList<int>(values);
 
-        sut.Insert(insertOnIndex, insertedInt);
-        if (sut.Contains(insertedInt))
+        sut.Insert(insertOnIndex, insertedValue);
+        if (sut.Contains(insertedValue))
         {
             actual = expected;
         }
         Assert.Equal(expected, actual);
+        Assert.True(sut.Contains(insertedValue));
+
     }
+   
     // [Theory]
     // [InlineData(1,2,3)]
     // public void IndexOf_ShouldReturnIndex_WhenItemInArray(params int[] values)
