@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 
 namespace Tests.UnitTests;
 
-public class AdpDynamicArrayTest
+public class AdpDynamicArrayStepSize1Test
 {
     private readonly ITestOutputHelper _testOutputHelper;
 
-    public AdpDynamicArrayTest(ITestOutputHelper testOutputHelper)
+    public AdpDynamicArrayStepSize1Test(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
     }
@@ -20,7 +20,7 @@ public class AdpDynamicArrayTest
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Push_CheckIfItemsAreEqual_WhenMultipleItemsArePushed<T>(T[] values)
     {
-        var sut = new AdpDynamicArray<T>();
+        var sut = new AdpDynamicArrayStepSize1<T>();
 
         foreach (var value in values)
         {
@@ -36,7 +36,7 @@ public class AdpDynamicArrayTest
     public void Pop_CheckCountMinus1_WhenLastItemIsRemoved<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         sut.Pop();
         Assert.Equal(values.Length - 1, sut.Count());
@@ -47,7 +47,7 @@ public class AdpDynamicArrayTest
     public void Pop_CheckLastItemIsReturned<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
         Assert.Equal(values[^1], sut.Pop());
     }
 
@@ -56,7 +56,7 @@ public class AdpDynamicArrayTest
     public void Clear_ShouldBeEmpty_WhenCleared<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         sut.Clear();
         Assert.Equal(0, sut.Count());
@@ -67,7 +67,7 @@ public class AdpDynamicArrayTest
     public void Contains_ShouldReturnTrue_WhenItemIsInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         Assert.True(sut.Contains(values[^1]));
     }
@@ -77,7 +77,7 @@ public class AdpDynamicArrayTest
     public void Contains_ShouldReturnFalse_WhenItemIsNotInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
         Assert.False(sut.Contains(GetValueForType<T>()));
     }
 
@@ -86,7 +86,7 @@ public class AdpDynamicArrayTest
     public void Insert_ShouldInsertItem_WhenItemIsInserted<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
         sut.Insert(1, value);
@@ -98,31 +98,20 @@ public class AdpDynamicArrayTest
     public void Insert_ShouldNotAffectOtherItems_WhenItemIsInserted<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
         sut.Insert(1, value);
         Assert.True(sut.Contains(values[0]) && sut.Contains(values[^1]));
     }
 
-    [Theory]
-    [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    public void Insert_ShouldAdd1ToCount_WhenItemIsInserted<T>(T[] values)
-    {
-        if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
-
-        var value = GetValueForType<T>();
-        sut.Insert(1, value);
-        Assert.Equal(values.Length + 1, sut.Count());
-    }
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Remove_ShouldReturnTrue_WhenItemIsInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         Assert.True(sut.Remove(values[^1]));
     }
@@ -132,10 +121,10 @@ public class AdpDynamicArrayTest
     public void Remove_ShouldRemoveItem_WhenItemIsInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
-        sut.Insert(0, value);
+        sut.Insert(1, value);
 
         sut.Remove(value);
         Assert.False(sut.Contains(value));
@@ -146,7 +135,7 @@ public class AdpDynamicArrayTest
     public void Remove_CheckCountMinus1_WhenItemIsRemoved<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         sut.Remove(values[^1]);
         Assert.Equal(values.Length - 1, sut.Count());
@@ -157,7 +146,7 @@ public class AdpDynamicArrayTest
     public void Remove_ShouldNotEffectOtherItems_WhenItemIsRemoved<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
         sut.Insert(1, value);
@@ -171,7 +160,7 @@ public class AdpDynamicArrayTest
     public void RemoveAt_ShouldReturnTrue_WhenIndexIsInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         Assert.True(sut.RemoveAt(0));
     }
@@ -181,12 +170,12 @@ public class AdpDynamicArrayTest
     public void RemoveAt_ShouldRemoveItem_WhenIndexIsInArray<T>(T[] values)
     {
         if (AssertIndexOutOfRangeWhenEmptyArray(values)) return;
-        var sut = new AdpDynamicArray<T> { values.ToArray() };
+        var sut = new AdpDynamicArrayStepSize1<T> { values.ToArray() };
 
         var value = GetValueForType<T>();
-        sut.Insert(0, value);
+        sut.Add(value);
 
-        sut.RemoveAt(0);
+        sut.RemoveAt(sut.Count() - 1);
         Assert.False(sut.Contains(value));
     }
 
