@@ -1,22 +1,33 @@
 ﻿using System;
 using Algorithms.Algorithms;
+using Tests.DataSets;
 using Xunit;
 
 namespace Tests.UnitTests;
 
 public class AdpDoublyLinkedList
 {
+    // [Theory]
+    // //    [InlineData()] // Lege array?
+    // //    [InlineData("test","ninja")] // String array?
+    //
+    // [InlineData(1)]
+    // [InlineData(1, 2, 3)]
+    // [InlineData(11, -222, 100)]
+    // [InlineData(1, 2, 3, 11, -222, 100)]
+    // public void Count_AssertShouldReturnExpected_WithNumbers(params int[] values)
+    // {
+    //     var expected = values.Length;
+    //     var sut = new AdpDoublyLinkedList<int>(values);
+    //
+    //     Assert.Equal(expected, sut.Count());
+    // }    
     [Theory]
-    //    [InlineData()] // Lege array?
-    //    [InlineData("test","ninja")] // String array?
-    [InlineData(1)]
-    [InlineData(1, 2, 3)]
-    [InlineData(11, -222, 100)]
-    [InlineData(1, 2, 3, 11, -222, 100)]
-    public void Count_AssertShouldReturnExpected_WithNumbers(params int[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Count_AssertShouldReturnExpected_WithNumbers<T>(T[] values)
     {
         var expected = values.Length;
-        var sut = new AdpDoublyLinkedList<int>(values);
+        var sut = new AdpDoublyLinkedList<T>(values);
 
         Assert.Equal(expected, sut.Count());
     }
