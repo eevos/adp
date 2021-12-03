@@ -7,21 +7,6 @@ namespace Tests.UnitTests;
 
 public class AdpDoublyLinkedList
 {
-    // [Theory]
-    // //    [InlineData()] // Lege array?
-    // //    [InlineData("test","ninja")] // String array?
-    //
-    // [InlineData(1)]
-    // [InlineData(1, 2, 3)]
-    // [InlineData(11, -222, 100)]
-    // [InlineData(1, 2, 3, 11, -222, 100)]
-    // public void Count_AssertShouldReturnExpected_WithNumbers(params int[] values)
-    // {
-    //     var expected = values.Length;
-    //     var sut = new AdpDoublyLinkedList<int>(values);
-    //
-    //     Assert.Equal(expected, sut.Count());
-    // }    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Count_AssertShouldReturnExpected_WithNumbers<T>(T[] values)
@@ -75,21 +60,21 @@ public class AdpDoublyLinkedList
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Push_ShouldCountItems_WhenItemsInsertedInFilledLinkedList<T>(T[] values)
     {
-        var firstArray = new[] {4, 5, 6};
-        
-        // T[] myTs = Array.ConvertAll(firstArray, typeof(T));
-        var myTs = Convert.ChangeType(firstArray, typeof(T[]));
-        // T[] firstArray = new T [3];
-        
-        var sut = new AdpDoublyLinkedList<T>();
-        var expected = (values.Length + firstArray.Length);
-
-        var item = (T) (object) 1;
-        sut.Push(item);
-        // sut.Push(firstArray);
-        sut.Push(values);
-        
-        Assert.Equal(expected, sut.Count());
+        // var firstArray = new[] {4, 5, 6};
+        //
+        // // T[] myTs = Array.ConvertAll(firstArray, typeof(T));
+        // var myTs = Convert.ChangeType(firstArray, typeof(T[]));
+        // // T[] firstArray = new T [3];
+        //
+        // var sut = new AdpDoublyLinkedList<T>();
+        // var expected = (values.Length + firstArray.Length);
+        //
+        // var item = (T) (object) 1;
+        // sut.Push(item);
+        // // sut.Push(firstArray);
+        // sut.Push(values);
+        //
+        // Assert.Equal(expected, sut.Count());
     }
 
     [Theory]
@@ -111,10 +96,10 @@ public class AdpDoublyLinkedList
         // Assert.True(sut.Contains(insertedValue));
     }
    
-    // [Theory]
-    // [InlineData(1,2,3)]
-    // public void IndexOf_ShouldReturnIndex_WhenItemInArray(params int[] values)
-    // {
-    //    
-    // }
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void IndexOf_ShouldReturnIndex_WhenItemInArray<T>(T[] values)
+    {
+       
+    }
 }
