@@ -53,14 +53,35 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
         var node = new LinkedListNode<T>(itemToAdd);
         items.AddFirst(node);
     }
-
+    // public void Push(int itemToAdd)
+    // {
+    //     var node = new LinkedListNode<T>(itemToAdd);
+    //     items.AddFirst(node);
+    // }
     public void Push(T[] itemsToAdd)
     {
         for (var i = 0; i < itemsToAdd.Length; i++)
         {
-            var node = itemsToAdd[i];
+            var node = new LinkedListNode<T>(itemsToAdd[i]);
             this.items.AddFirst(node);
         }
+    }
+
+    public T Get(int index)
+    {
+        if (items == null)
+        {
+            throw new Exception("Array is empty");
+        } 
+        var itemsToSearch = items;
+        var j = 0;
+        while (j < index)
+        {
+            itemsToSearch.RemoveFirst();
+            j++;
+        }
+        var item = itemsToSearch.First.Value;
+        return item;
     }
 
     public int IndexOf(T item)
@@ -84,6 +105,7 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
                 {
                     items.AddAfter(node.Previous, item);
                 }
+
                 node = node.Next;
             }
         }

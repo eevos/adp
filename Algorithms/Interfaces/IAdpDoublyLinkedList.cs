@@ -4,6 +4,7 @@ public interface IAdpDoublyLinkedList<T>
 {
     public int Count();
     public void Push(T itemToAdd);
+    public T Get(int index);
     public void Clear();
 
     public bool Contains(T item);
