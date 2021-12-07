@@ -60,21 +60,13 @@ public class AdpDoublyLinkedList
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Push_ShouldCountItems_WhenItemsInsertedInFilledLinkedList<T>(T[] values)
     {
-        // var firstArray = new[] {4, 5, 6};
-        //
-        // // T[] myTs = Array.ConvertAll(firstArray, typeof(T));
-        // var myTs = Convert.ChangeType(firstArray, typeof(T[]));
-        // // T[] firstArray = new T [3];
-        //
-        // var sut = new AdpDoublyLinkedList<T>();
-        // var expected = (values.Length + firstArray.Length);
-        //
-        // var item = (T) (object) 1;
-        // sut.Push(item);
-        // // sut.Push(firstArray);
-        // sut.Push(values);
-        //
-        // Assert.Equal(expected, sut.Count());
+        var sut = new AdpDoublyLinkedList<T>();
+        var item = GetValueForType<T>(item);
+        for (var i = 0; i < 3; i++) sut.Push(item);
+        sut.Push(values);
+        var expected = values.Length + 3;
+        
+        Assert.Equal(expected, sut.Count());
     }
 
     [Theory]
@@ -102,4 +94,20 @@ public class AdpDoublyLinkedList
     {
        
     }
+    
+     private static T GetValueForType<T>(T item)
+        {
+            // switch with type
+            return typeof(T).Name switch
+            {
+                "Int32" => (T)Convert.ChangeType(9999999, typeof(T)),
+                "String" => (T)Convert.ChangeType("notInArray", typeof(T)),
+                "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
+                "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
+                "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
+                "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))),
+                _ => throw new Exception("Type not supported")
+            };
+        }
+
 }
