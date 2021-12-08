@@ -1,13 +1,12 @@
-using System;
 using System.Linq;
-using Algorithms;
+using Algorithms.DataStructures;
 using Tests.DataSets;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests.UnitTests;
 
-public class AdpDynamicArrayTest
+public class AdpDynamicArrayTest : BaseListTest
 {
     private readonly ITestOutputHelper _testOutputHelper;
 
@@ -22,10 +21,7 @@ public class AdpDynamicArrayTest
     {
         var sut = new AdpDynamicArray<T>();
 
-        foreach (var value in values)
-        {
-            sut.Add(value);
-        }
+        foreach (var value in values) sut.Add(value);
 
         Assert.Equal(values, sut.ToArray());
     }
@@ -188,31 +184,5 @@ public class AdpDynamicArrayTest
 
         sut.RemoveAt(0);
         Assert.False(sut.Contains(value));
-    }
-
-    private static T GetValueForType<T>()
-    {
-        // switch with type
-        return typeof(T).Name switch
-        {
-            "Int32" => (T)Convert.ChangeType(9999999, typeof(T)),
-            "String" => (T)Convert.ChangeType("notInArray", typeof(T)),
-            "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
-            "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
-            "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
-            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))),
-            _ => throw new Exception("Type not supported")
-        };
-    }
-
-    private static bool AssertIndexOutOfRangeWhenEmptyArray<T>(T[] values)
-    {
-        if (values.Length == 0)
-        {
-            Assert.Throws<IndexOutOfRangeException>(() => values[0]);
-            return true;
-        }
-
-        return false;
     }
 }

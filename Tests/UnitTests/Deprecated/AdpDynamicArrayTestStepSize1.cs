@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Algorithms;
+using Algorithms.DataStructures.Deprecated;
 using Tests.DataSets;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,10 +22,7 @@ public class AdpDynamicArrayStepSize1Test
     {
         var sut = new AdpDynamicArrayStepSize1<T>();
 
-        foreach (var value in values)
-        {
-            sut.Add(value);
-        }
+        foreach (var value in values) sut.Add(value);
 
         Assert.Equal(values, sut.ToArray());
     }

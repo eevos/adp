@@ -1,4 +1,5 @@
-﻿using Algorithms;
+﻿using Algorithms.DataStructures;
+using Algorithms.DataStructures.Deprecated;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Order;
 

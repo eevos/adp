@@ -1,16 +1,10 @@
 ﻿using System.Collections;
-using Algorithms.Interfaces;
 
-namespace Algorithms;
+namespace Algorithms.DataStructures.Deprecated;
 
-public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
+public class AdpDynamicArrayStepSize1<T> : IEnumerable<T>
 {
-    T[] items;
-
-    public int Count()
-    {
-        return items.Length;
-    }
+    private T[] items;
 
     public AdpDynamicArrayStepSize1()
     {
@@ -22,36 +16,48 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
         items = new T[capacity];
         var test = new List<int>();
     }
-    
+
     public AdpDynamicArrayStepSize1(IEnumerable<T> collection)
     {
         items = collection.ToArray();
     }
 
+    public T this[int index]
+    {
+        get => items[index];
+        set => items[index] = value;
+    }
+
+    public IEnumerator<T> GetEnumerator()
+    {
+        return ((IEnumerable<T>)items).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public int Count()
+    {
+        return items.Length;
+    }
+
     public void Add(T item)
     {
         var newItems = new T[items.Length + 1];
-        for (var i = 0; i < items.Length; i++)
-        {
-            newItems[i] = items[i];
-        }
+        for (var i = 0; i < items.Length; i++) newItems[i] = items[i];
 
         newItems[^1] = item;
         items = newItems;
     }
-    
+
     public void Add(T[] collection)
     {
         var newItems = new T[items.Length + collection.Length];
-        for (var i = 0; i < items.Length; i++)
-        {
-            newItems[i] = items[i];
-        }
-        
-        for (var i = 0; i < collection.Length; i++)
-        {
-            newItems[i + items.Length] = collection[i];
-        }
+        for (var i = 0; i < items.Length; i++) newItems[i] = items[i];
+
+        for (var i = 0; i < collection.Length; i++) newItems[i + items.Length] = collection[i];
 
         items = newItems;
     }
@@ -60,10 +66,7 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
     {
         var item = items[^1];
         var newItems = new T[items.Length - 1];
-        for (var i = 0; i < newItems.Length; i++)
-        {
-            newItems[i] = items[i];
-        }
+        for (var i = 0; i < newItems.Length; i++) newItems[i] = items[i];
 
         items = newItems;
         return item;
@@ -107,10 +110,7 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
     public bool Remove(T item)
     {
         var index = IndexOf(item);
-        if (index >= 0)
-        {
-            return RemoveAt(index);
-        }
+        if (index >= 0) return RemoveAt(index);
 
         return false;
     }
@@ -135,21 +135,5 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
     public T[] ToArray()
     {
         return items;
-    }
-
-    public T this[int index]
-    {
-        get => items[index];
-        set => items[index] = value;
-    }
-
-    public IEnumerator<T> GetEnumerator()
-    {
-        return ((IEnumerable<T>)items).GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }
