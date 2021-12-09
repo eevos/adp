@@ -4,7 +4,7 @@ namespace Algorithms.DataStructures;
 
 public class AdpDynamicArray<T> : IEnumerable<T>
 {
-    private T?[] items;
+    private T[] items;
     private int size;
 
     public AdpDynamicArray()
@@ -27,7 +27,7 @@ public class AdpDynamicArray<T> : IEnumerable<T>
 
     public int Capacity => items.Length;
 
-    public T? this[int index]
+    public T this[int index]
     {
         get => items[index];
         set => items[index] = value;
