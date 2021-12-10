@@ -8,7 +8,7 @@ namespace Tests.DataSets;
 
 public class DataSetLoader<T> : IEnumerable<object[]>
 {
-    public T DataSet { get; }
+    public T? DataSet { get; }
 
     public DataSetLoader()
     {

@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Algorithms.DataStructures;
 
@@ -154,7 +157,7 @@ public class AdpDeque<T> : IEnumerable<T>
         {
             return newItems;
         }
-
+        
         if (_head < _tail)
         {
             Array.Copy(_items, _head, newItems, 0, _size);

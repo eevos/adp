@@ -59,8 +59,6 @@ public class AdpLinkedList<T> : IEnumerable<T>
     public void AddBefore(AdpLinkedListNode<T> node, T item)
     {
         var newNode = new AdpLinkedListNode<T>(item, node.Prev, node);
-        newNode.Next = node;
-        newNode.Prev = node.Prev;
         node.Prev = newNode;
         newNode.Prev.Next = newNode;
         size++;
@@ -69,10 +67,9 @@ public class AdpLinkedList<T> : IEnumerable<T>
     public AdpLinkedListNode<T>? Search(T item)
     {
         var current = baseNode.Next;
-        while (!current.Value.Equals(item))
+        while (!Equals(current.Value, item))
         {
             current = current.Next;
-
             if (current == baseNode) return null;
         }
 
@@ -104,16 +101,16 @@ public class AdpLinkedListNode<T>
 {
     public AdpLinkedListNode<T> Prev { get; set; }
     public AdpLinkedListNode<T> Next { get; set; }
-    public T? Value { get; set; }
+    public T Value { get; set; }
 
-    public AdpLinkedListNode(T? value)
+    public AdpLinkedListNode(T value)
     {
         Value = value;
         Prev = this;
         Next = this;
     }
 
-    public AdpLinkedListNode(T? value, AdpLinkedListNode<T> prev, AdpLinkedListNode<T> next)
+    public AdpLinkedListNode(T value, AdpLinkedListNode<T> prev, AdpLinkedListNode<T> next)
     {
         Value = value;
         Prev = prev;
