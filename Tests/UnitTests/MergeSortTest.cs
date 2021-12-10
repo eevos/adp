@@ -16,15 +16,16 @@ public class MergeSortTest
         var sut = new MergeSortStrategy();
         Assert.Equal(expected, sut.MergeSort(values));
     }
+    
     // [Theory]
-    // [MemberData(nameof(List<int>),2, 3, 4, 5, 6, 7, 8, 9, 1)]
-    // // [InlineData(1, 2, 3, 4, 5, 6, 7, 8, 9)]
-    // public void MergeSort_ShouldReturnSortedList_WithIntList(List<int> values)
+    // [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    // public void MergeSort_ShouldReturnSortedList_WithIntList<T>(T[] values) where T : IComparable
     // {   
-    //     var valuesList = new List<int> {2, 3, 4, 5, 6, 7, 8, 9, 1};
-    //     var expected = new List<int>{1,2,3,4,5,6,7,8,9};
-    //     var sut = new MergeSortStrategy();
-    //     Assert.Equal(expected, sut.MergeSort(valuesList));
+        // var valuesList = new List<T>(values);
+        // var expected = new List<T>(values);
+        // expected.Sort();
+        // var sut = new MergeSortStrategy<T>();
+        // Assert.Equal(expected, sut.MergeSort(valuesList));
     // }
     
 }
