@@ -61,7 +61,7 @@ public class AdpDoublyLinkedList
     public void Push_ShouldCountItems_WhenItemsInsertedInFilledLinkedList<T>(T[] values)
     {
         var sut = new AdpDoublyLinkedList<T>();
-        var item = GetValueForType<T>(item);
+        var item = GetValueForType<T>();
         for (var i = 0; i < 3; i++) sut.Push(item);
         sut.Push(values);
         var expected = values.Length + 3;
@@ -95,7 +95,7 @@ public class AdpDoublyLinkedList
        
     }
     
-     private static T GetValueForType<T>(T item)
+     private static T GetValueForType<T>()
         {
             // switch with type
             return typeof(T).Name switch
