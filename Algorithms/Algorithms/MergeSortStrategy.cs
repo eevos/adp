@@ -29,42 +29,41 @@ public class MergeSortStrategy
         }
         left = MergeSort(left);
         right = MergeSort(right);
-        result = merge(left, right);
+        result = Merge(left, right);
         return result;
     }
 
-    public static int[] merge(int[] left, int[] right)
+    private static int[] Merge(int[] left, int[] right)
     {
         int[] result = new int[right.Length + left.Length];
-        int indexLeft = 0, indexRight = 0, indexResult = 0;
-        while (indexLeft < left.Length || indexRight < right.Length)
+        var iResult = 0;
+        var iRight = 0;
+        var iLeft = 0;
+        while (iLeft < left.Length && iRight < right.Length)
         {
-            if (indexLeft < left.Length && indexRight < right.Length)
+            if (left[iLeft] > right[iRight])
             {
-                if (left[indexLeft] <= right[indexRight])
-                {
-                    result[indexResult] = left[indexLeft];
-                    indexLeft++;
-                }
-                else
-                {
-                    result[indexResult] = right[indexRight];
-                    indexRight++;
-                }
-                indexResult++;
-            }
-            else if (indexLeft < left.Length)
-            {
-                result[indexResult] = left[indexLeft];
-                indexLeft++;
-                indexResult++;
+                result[iResult] = right[iRight];
+                iRight++;
             }
             else
             {
-                result[indexResult] = right[indexRight];
-                indexRight++;
-                indexResult++;
+                result[iResult] = left[iLeft];
+                iLeft++;
             }
+            iResult++;
+        }
+        while (iLeft < left.Length)
+        {
+            result[iResult] = left[iLeft];
+            iLeft++;
+            iResult++;
+        }
+        while (iRight < right.Length)
+        {
+            result[iResult] = right[iRight];
+            iRight++;
+            iResult++;
         }
         return result;
     }
