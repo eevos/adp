@@ -26,7 +26,7 @@ public class BaseListTest
             "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
             "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
             "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
-            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))),
+            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))!),
             _ => throw new Exception("Type not supported")
         };
     }

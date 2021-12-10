@@ -1,4 +1,5 @@
-﻿using Algorithms.DataStructures;
+﻿using Implementations.DataSets;
+using Implementations.DataStructures;
 using Tests.DataSets;
 using Xunit;
 
@@ -31,7 +32,7 @@ public class AdpLinkedListTest : BaseListTest
         var sut = new AdpLinkedList<T>();
         foreach (var value in values) sut.Add(value);
 
-        Assert.Equal(values[0], sut.First().Value);
+        Assert.Equal(values[0], sut.First()!.Value);
     }
 
     [Theory]
@@ -42,7 +43,7 @@ public class AdpLinkedListTest : BaseListTest
         var sut = new AdpLinkedList<T>();
         foreach (var value in values) sut.Add(value);
 
-        Assert.Equal(values[^1], sut.Last().Value);
+        Assert.Equal(values[^1], sut.Last()!.Value);
     }
     
     [Theory]
@@ -55,9 +56,9 @@ public class AdpLinkedListTest : BaseListTest
 
         var addBeforeThisItem = sut.First();
         var valueForType = GetValueForType<T>();
-        sut.AddAfter(addBeforeThisItem, valueForType);
+        sut.AddAfter(addBeforeThisItem!, valueForType);
         
-        Assert.Equal(valueForType, sut.First().Next.Value);
+        Assert.Equal(valueForType, sut.First()!.Next.Value);
     }
     
     [Theory]
@@ -70,8 +71,8 @@ public class AdpLinkedListTest : BaseListTest
 
         var addBeforeThisItem = sut.First();
         var valueForType = GetValueForType<T>();
-        sut.AddBefore(addBeforeThisItem, valueForType);
-        Assert.Equal(valueForType, sut.First().Value);
+        sut.AddBefore(addBeforeThisItem!, valueForType);
+        Assert.Equal(valueForType, sut.First()!.Value);
     }
 
     [Theory]
@@ -98,7 +99,7 @@ public class AdpLinkedListTest : BaseListTest
         foreach (var value in values) sut.Add(value);
 
         var node = sut.Search(values[^1]);
-        Assert.Equal(values[^1], node.Value);
+        Assert.Equal(values[^1], node!.Value);
     }
 
     // Check if search returns null when item is not found
@@ -183,7 +184,7 @@ public class AdpLinkedListTest : BaseListTest
         var sut = new AdpLinkedList<T>();
         foreach (var value in values) sut.Add(value);
 
-        Assert.True(sut.Remove(sut.First()));
+        Assert.True(sut.Remove(sut.First()!));
     }
     
     [Theory]
@@ -197,7 +198,7 @@ public class AdpLinkedListTest : BaseListTest
         var valueToRemove = GetValueForType<T>();
         sut.Add(valueToRemove);
         var nodeToRemove = sut.Search(valueToRemove);
-        sut.Remove(nodeToRemove);
-        Assert.False(sut.Contains(nodeToRemove.Value));
+        sut.Remove(nodeToRemove!);
+        Assert.False(sut.Contains(nodeToRemove!.Value));
     }
 }

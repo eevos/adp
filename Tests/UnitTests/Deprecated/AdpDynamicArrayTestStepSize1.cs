@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using Algorithms.DataStructures.Deprecated;
+using Implementations.DataSets;
+using Implementations.DataStructures.Deprecated;
 using Tests.DataSets;
 using Xunit;
 using Xunit.Abstractions;
@@ -186,7 +187,7 @@ public class AdpDynamicArrayStepSize1Test
             "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
             "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
             "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
-            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))),
+            "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))!),
             _ => throw new Exception("Type not supported")
         };
     }

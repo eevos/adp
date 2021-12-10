@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using Algorithms.DataStructures;
+using Implementations.DataSets;
+using Implementations.DataStructures;
 using Tests.DataSets;
 using Xunit;
 

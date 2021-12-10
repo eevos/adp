@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Algorithms.DataStructures;
+namespace Implementations.DataStructures;
 
 public class AdpDeque<T> : IEnumerable<T>
 {
@@ -60,7 +60,7 @@ public class AdpDeque<T> : IEnumerable<T>
         }
 
         T item = _items[_head];
-        _items[_head] = default;
+        _items[_head] = default!;
         NextIndex(ref _head);
         _size--;
         return item;
@@ -75,7 +75,7 @@ public class AdpDeque<T> : IEnumerable<T>
 
         PrevIndex(ref _tail);
         T item = _items[_tail];
-        _items[_tail] = default;
+        _items[_tail] = default!;
         _size--;
         return item;
     }

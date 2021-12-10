@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Algorithms.DataStructures.Deprecated;
+namespace Implementations.DataStructures.Deprecated;
 
 public class AdpDynamicArrayStepSize1<T> : IEnumerable<T>
 {

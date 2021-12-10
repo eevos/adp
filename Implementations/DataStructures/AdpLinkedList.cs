@@ -1,22 +1,22 @@
 ﻿using System.Collections;
 
-namespace Algorithms.DataStructures;
+namespace Implementations.DataStructures;
 
 public class AdpLinkedList<T> : IEnumerable<T>
 {
-    private readonly AdpLinkedListNode<T> baseNode;
-    private int size;
+    private readonly AdpLinkedListNode<T> _baseNode;
+    private int _size;
 
     public AdpLinkedList()
     {
-        baseNode = new AdpLinkedListNode<T>(default);
-        size = 0;
+        _baseNode = new AdpLinkedListNode<T>(default!);
+        _size = 0;
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        var current = baseNode.Next;
-        while (current != baseNode)
+        var current = _baseNode.Next;
+        while (current != _baseNode)
         {
             yield return current.Value;
             current = current.Next;
@@ -30,22 +30,22 @@ public class AdpLinkedList<T> : IEnumerable<T>
 
     public int Count()
     {
-        return size;
+        return _size;
     }
 
     public AdpLinkedListNode<T>? First()
     {
-        return baseNode.Next == baseNode ? null : baseNode.Next;
+        return _baseNode.Next == _baseNode ? null : _baseNode.Next;
     }
 
     public AdpLinkedListNode<T>? Last()
     {
-        return baseNode.Prev == baseNode ? null : baseNode.Prev;
+        return _baseNode.Prev == _baseNode ? null : _baseNode.Prev;
     }
 
     public void Add(T item)
     {
-        AddAfter(baseNode.Prev, item);
+        AddAfter(_baseNode.Prev, item);
     }
     
     public void AddAfter(AdpLinkedListNode<T> node, T item)
@@ -53,7 +53,7 @@ public class AdpLinkedList<T> : IEnumerable<T>
         var newNode = new AdpLinkedListNode<T>(item, node, node.Next);
         node.Next = newNode;
         newNode.Next.Prev = newNode;
-        size++;
+        _size++;
     }
     
     public void AddBefore(AdpLinkedListNode<T> node, T item)
@@ -61,16 +61,16 @@ public class AdpLinkedList<T> : IEnumerable<T>
         var newNode = new AdpLinkedListNode<T>(item, node.Prev, node);
         node.Prev = newNode;
         newNode.Prev.Next = newNode;
-        size++;
+        _size++;
     }
 
     public AdpLinkedListNode<T>? Search(T item)
     {
-        var current = baseNode.Next;
+        var current = _baseNode.Next;
         while (!Equals(current.Value, item))
         {
             current = current.Next;
-            if (current == baseNode) return null;
+            if (current == _baseNode) return null;
         }
 
         return current;
@@ -92,7 +92,7 @@ public class AdpLinkedList<T> : IEnumerable<T>
     {
         node.Prev.Next = node.Next;
         node.Next.Prev = node.Prev;
-        size--;
+        _size--;
         return true;
     }
 }

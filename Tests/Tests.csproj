@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Algorithms\Algorithms.csproj" />
+        <ProjectReference Include="..\Implementations\Implementations.csproj" />
     </ItemGroup>
 
 </Project>

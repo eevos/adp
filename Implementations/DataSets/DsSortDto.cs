@@ -28,4 +28,5 @@ public class DsSortDto
     public int[]? ListRandom10000 { get; set; }
 
     [JsonProperty("lijst_willekeurig_3")] public int[]? ListRandom3 { get; set; }
+    [JsonProperty("lijst_strings_5")] public string[]? ListString5 { get; set; }
 }

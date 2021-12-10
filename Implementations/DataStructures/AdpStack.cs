@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Algorithms.DataStructures;
+namespace Implementations.DataStructures;
 
 public class AdpStack<T> : IEnumerable<T>
 {

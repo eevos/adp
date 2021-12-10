@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections;
 using Newtonsoft.Json;
 
-namespace Tests.DataSets;
+namespace Implementations.DataSets;
 
 public class DataSetLoader<T> : IEnumerable<object[]>
 {
-    public T? DataSet { get; }
+    private T? DataSet { get; }
 
     public DataSetLoader()
     {
         var workingDirectory = Environment.CurrentDirectory;
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent?.FullName;
         if (projectDirectory == null) throw new Exception("Could not find project directory");
-        var dataSetDirectory = Path.Combine(projectDirectory, "Algorithms/DataSets");
+        var dataSetDirectory = Path.Combine(projectDirectory, "Implementations/DataSets");
         
 
         var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
@@ -28,7 +25,7 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         var properties = typeof(T).GetProperties();
         foreach (var property in properties)
         {
-            yield return new [] { property.GetValue(DataSet) };
+            yield return new [] { property.GetValue(DataSet) }!;
         }
     }
 
