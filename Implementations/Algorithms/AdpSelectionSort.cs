@@ -1,6 +1,6 @@
 ﻿namespace Implementations.Algorithms;
 
-public class AdpSelectionSort<T>
+public class AdpSelectionSort<T> : BaseSort<T>
 {
     public static void Sort(ref T[] array)
     {
@@ -14,11 +14,12 @@ public class AdpSelectionSort<T>
             {
                 try
                 {
-                    if (comparer.Compare(array[j], array[maxIndex]) > 0)
+                    if (Compare(array[j], array[maxIndex]))
                     {
                         maxIndex = j;
                     }
-                    (array[maxIndex], array[length - i - 1]) = (array[length - i - 1], array[maxIndex]);
+
+                    Swap(ref array, maxIndex, length - i - 1);
                 }
                 catch (ArgumentException e)
                 {
