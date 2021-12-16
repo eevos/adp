@@ -11,7 +11,7 @@ public class AdpInsertionSort<T> : BaseSort<T>
             for (var j = i; j > 0; j--)
             {
                 if (Compare(array[j], array[j - 1])) break;
-                (array[j], array[j - 1]) = (array[j - 1], array[j]);
+                Swap(ref array, j, j - 1);
             }
         }
     }
