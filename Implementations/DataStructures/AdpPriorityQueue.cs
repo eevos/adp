@@ -4,11 +4,22 @@ namespace Implementations.DataStructures;
 
 public class AdpPriorityQueue<TElement, TPriority>
 {
+    
+    private (TElement, TPriority)[] _heap;
+    private int _size;
+
     public AdpPriorityQueue()
     {
+        _heap = Array.Empty<(TElement, TPriority)>();
+        _size = 0;
     }
     
-    public void Add(TElement item, TPriority priority)
+    public int Count()
+    {
+        return _size;
+    }
+    
+    public void Enqueue(TElement item, TPriority priority)
     {
         throw new NotImplementedException();
     }
