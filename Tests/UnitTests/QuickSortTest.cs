@@ -14,8 +14,7 @@ public class QuickSortTest
     public void QuickSort_ShouldReturnSortedList_WithIntArray<T>(T[] values)
     {
         var sut = new QuickSortStrategy<T>();
-        
-        
+
         var expected = values;
         Array.Sort(expected);
         var actual = sut.QuickSort(values, 0, values.Length - 1);

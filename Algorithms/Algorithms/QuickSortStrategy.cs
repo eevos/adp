@@ -6,6 +6,10 @@ public class QuickSortStrategy<T>
 {
     public T[] QuickSort(T[] array, int leftPointer, int rightPointer)
     {
+        if (array is null)
+        {
+            throw new InvalidOperationException("Array is not allowed to be null.");
+        }
         var pivot = leftPointer;
         var comparer = Comparer<T>.Default;
 
