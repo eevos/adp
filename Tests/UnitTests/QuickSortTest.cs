@@ -10,12 +10,18 @@ namespace Tests.UnitTests;
 public class QuickSortTest
 {
     [Theory]
-    [InlineData(2, 3, 4, 5, 6, 7, 8, 9, 1)]
-    public void QuickSort_ShouldReturnSortedList_WithIntArray(params int[] values)
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void QuickSort_ShouldReturnSortedList_WithIntArray<T>(T[] values)
     {
+        var sut = new QuickSortStrategy<T>();
+        
+        
         var expected = values;
-        var sut = new QuickSortStrategy();
         Array.Sort(expected);
-        Assert.Equal(expected, sut.QuickSort(values));
+        var actual = sut.QuickSort(values, 0, values.Length - 1);
+        Assert.Equal(expected, actual);
     }
 }
+
+
+
