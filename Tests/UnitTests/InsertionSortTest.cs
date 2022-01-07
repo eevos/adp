@@ -12,11 +12,17 @@ public class InsertionSortTest
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void InsertionSort_ShouldReturnSortedList_WithIntArray<T>(T[] values)
     {
-        var sut = new InsertionSortStrategy<T>();
-    
         var expected = values;
+        
+        if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(expected));
+            return;
+        }
+        var sut = new InsertionSortStrategy<T>();
+        
         Array.Sort(expected);
-        var actual = sut.InsertionSort(values);
+        var actual = sut.InsertionSort(values, values.Length);
         Assert.Equal(expected, actual);
     }
 }
