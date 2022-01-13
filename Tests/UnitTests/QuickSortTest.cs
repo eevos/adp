@@ -13,11 +13,17 @@ public class QuickSortTest
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void QuickSort_ShouldReturnSortedList_WithIntArray<T>(T[] values)
     {
-        var sut = new QuickSortStrategy<T>();
-
         var expected = values;
+        if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(expected));
+            return;
+        }
         Array.Sort(expected);
+
+        var sut = new QuickSortStrategy<T>();
         var actual = sut.QuickSort(values, 0, values.Length - 1);
+        
         Assert.Equal(expected, actual);
     }
 }
