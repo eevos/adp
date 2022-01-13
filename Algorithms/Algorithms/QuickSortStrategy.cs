@@ -6,7 +6,7 @@ public class QuickSortStrategy<T>
 {
     public T[] QuickSort(T[] array, int leftPointer, int rightPointer)
     {
-        if (array is null || leftPointer <= 0)
+        if (array.Length < 1 )
         {
             throw new InvalidOperationException("Array is not allowed to be null.");
         }
