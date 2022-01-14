@@ -25,26 +25,23 @@ public class InsertionSortTest
 
         Assert.Equal(expected, actual);
     }
+    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void RecursiveInsertionSortForLoop_ShouldReturnSortedList<T>(T[] values)
     {
-        var expected = values;
-        var actual = values;
+        var expected = new List<T>(values);
+        
         var insertionSortStrategy = new InsertionSortStrategy<T>();
-        actual = insertionSortStrategy.RecursiveSortForLoop(actual, actual.Length);
-
+        var actual = insertionSortStrategy.RecursiveSortForLoop(values, values.Length);
         
         if (typeof(T).Name == "Object")
         {
-            Assert.Throws<InvalidOperationException>(() => Array.Sort(expected));
+            Assert.Throws<InvalidOperationException>(() => expected.Sort());
             return;
         }
-        Array.Sort(expected);
+        expected.Sort();
         
-        // var insertionSortStrategy = new InsertionSortStrategy<T>();
-        // actual = insertionSortStrategy.RecursiveSortForLoop(actual, actual.Length);
-
         Assert.Equal(expected, actual);
     }
 }
