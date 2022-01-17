@@ -1,4 +1,6 @@
-﻿using Algorithms.Algorithms;
+﻿using System;
+using System.Collections.Generic;
+using Algorithms.Algorithms;
 using Tests.DataSets;
 using Xunit;
 
@@ -20,9 +22,8 @@ public class AdpAVLTreeTest
     }    
     
     [Theory]
-    // [ClassData(typeof(DataSetLoader<DsSortDto>))]
     [InlineData(1)]
-    public void InsertNode_ShouldReturnDepth<T>(params int[] values)
+    public void GetDepth_ShouldReturnDepth<T>(params int[] values)
     {
         var expected = 1;
         var insertedData = values[0];
@@ -30,26 +31,59 @@ public class AdpAVLTreeTest
         var sut = new AdpTree(new AdpNode(insertedData,null,null,null,1));
         
         Assert.Equal(expected, sut.ListRoot.GetDepth());
-    }    
+    }
     [Theory]
-    [InlineData(1)]
-    public void InsertMultipleNodes_ShouldReturnDepth<T>(params int[] values)
+    [InlineData(1,2,3)]
+    public void InsertMultipleNodes_ShouldReturnValueOfRightChild<T>(params int[] values)
     {
-        var tree = InsertTestNodes();
+        var expected = new List<int>(values);
+        var tree = InsertTestNodes(values);
+        var datarightChild = tree.ListRoot.GetRightChild().GetRightChild().GetData();
         
-        Assert.Equal(4, tree.ListRoot.GetDepth());
+        Assert.Equal(expected[2], datarightChild);
+    }
+    [Theory]
+    [InlineData(1,2,2)]
+    public void InsertDuplicateNode_ShouldReturnException<T>(params int[] values)
+    {
+        Assert.Throws<Exception>(() => InsertTestNodes(values));
+    }
+    
+    [Theory]
+    [InlineData(1,2,3)]
+    [InlineData(1,2,3,4,5)]
+    [InlineData(1,2,3,4,5,9,8,7)]
+    public void GetSize_ShouldReturnSize<T>(params int[] values)
+    {
+        var expected = values.Length;
+        var tree = InsertTestNodes(values);
+        var size = tree.GetSize();
+        
+        Assert.Equal(expected, size);
     }
 
-    public AdpTree InsertTestNodes()
+    [Theory]
+    [InlineData(1, 2, 3)]
+    [InlineData(1, 2, 3, 4, 5)]
+    [InlineData(1, 2, 3, 4, 5, 9, 8, 7)]
+    public void Find_ShouldReturnNode<T>(params int[] values)
+    {
+        var expected = values.Length;
+        var tree = InsertTestNodes(values);
+        var size = tree.GetSize();
+
+        Assert.Equal(expected, size);
+    }
+
+    
+    
+    public AdpTree InsertTestNodes(int[] data)
     {
         var tree = new AdpTree();
-        tree.Insert(1);
-        tree.Insert(2);
-        tree.Insert(3);
-        tree.Insert(4);
-
+        foreach (int item in data)
+        {
+            tree.Insert(item);
+        }
         return tree;
     }
-    
-    
 }

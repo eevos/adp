@@ -7,13 +7,13 @@ public class AdpNode
     private AdpNode _childRight;
     private AdpNode _childLeft;
     private AdpNode _parent;
-    private int? _data;
+    private int _data;
 
     public AdpNode(int data)
     {
         this._data = data;
     }
-    public AdpNode(int? data = default, 
+    public AdpNode(int data = default, 
         AdpNode parent = null, AdpNode childLeft = null,
         AdpNode childRight = null, int depth = default)
     {
@@ -34,7 +34,7 @@ public class AdpNode
         return this._depth;
     }
 
-    public int? GetData()
+    public int GetData()
     {
         return this._data;
     }

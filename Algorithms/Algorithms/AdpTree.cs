@@ -10,7 +10,6 @@ public class AdpTree
     {
         this._root = root;
     }
-
     public AdpTree()
     {
     }
@@ -29,23 +28,56 @@ public class AdpTree
         else if (node.GetData() > data)     //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
         {
             node.SetLeftChild(Insert(node.GetLeftChild(),data));
-            // node.left = Insert(node.left, key);
         }
         else if (node.GetData() < data)     //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
         {
             node.SetRightChild(Insert(node.GetRightChild(),data)); 
-            // node.right = Insert(node.right, key);   
         }
         else
         {
             throw new Exception("data already exists!");
         }
-
-        return _root;
-        // return rebalance(node);
+        return node;    // return rebalance(node);
     }
 
+    public AdpNode Find(int data)
+    {
+        var node = _root;
+        if (node.GetData() == data)
+        {
+            return node;
+        }
+        else if (node.GetData() < data)
+        {
+            Find(node.GetRightChild().GetData());
+        }
+        else
+        {
+            Find(node.GetLeftChild().GetData());
+        }
+        return node;
+    }
 
+    public int GetSize()
+    {
+        return GetSizeRecursive(_root);
+    }
+
+    private int GetSizeRecursive(AdpNode node)
+    {
+        int size; 
+        if (node == null)
+        {
+            return 0;
+        }
+        else
+        {
+            size = GetSizeRecursive(node.GetLeftChild()) + 1 + GetSizeRecursive(node.GetRightChild());
+        }
+        return size;
+    }
+    
+    
     public AdpNode ListRoot
     {
         get => _root;
