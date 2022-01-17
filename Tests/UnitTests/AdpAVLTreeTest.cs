@@ -32,7 +32,6 @@ public class AdpAVLTreeTest
         Assert.Equal(expected, sut.ListRoot.GetDepth());
     }    
     [Theory]
-    // [ClassData(typeof(DataSetLoader<DsSortDto>))]
     [InlineData(1)]
     public void InsertMultipleNodes_ShouldReturnDepth<T>(params int[] values)
     {
