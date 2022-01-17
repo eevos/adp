@@ -22,18 +22,19 @@ public class AdpAVLTreeTest
     }    
     
     [Theory]
-    [InlineData(1)]
+    [InlineData(1,2,3)]
     public void GetDepth_ShouldReturnDepth<T>(params int[] values)
     {
-        var expected = 1;
+        var expected = 2;
         var insertedData = values[0];
         
-        var sut = new AdpTree(new AdpNode(insertedData,null,null,null,1));
+        var sut = new AdpTree(new AdpNode(insertedData,null,null,2));
         
         Assert.Equal(expected, sut.ListRoot.GetDepth());
     }
     [Theory]
     [InlineData(1,2,3)]
+    [InlineData(1, 2, 3, 5, 9, 7, -2)]
     public void InsertMultipleNodes_ShouldReturnValueOfRightChild<T>(params int[] values)
     {
         var expected = new List<int>(values);
@@ -52,7 +53,7 @@ public class AdpAVLTreeTest
     [Theory]
     [InlineData(1,2,3)]
     [InlineData(1,2,3,4,5)]
-    [InlineData(1,2,3,4,5,9,8,7)]
+    [InlineData(1, 2, 3, 5, 9, 7, -2)]
     public void GetSize_ShouldReturnSize<T>(params int[] values)
     {
         var expected = values.Length;
@@ -63,16 +64,27 @@ public class AdpAVLTreeTest
     }
 
     [Theory]
-    [InlineData(1, 2, 3)]
-    [InlineData(1, 2, 3, 4, 5)]
-    [InlineData(1, 2, 3, 4, 5, 9, 8, 7)]
-    public void Find_ShouldReturnNode<T>(params int[] values)
+    [InlineData(new [] {1 , 2, 3}, 2)]
+    [InlineData(new [] {1, 2, 3, 5, 9, 7, -2}, 3)]
+    public void Find_ShouldReturnInsertedNode(int[] values, int findValue)
     {
-        var expected = values.Length;
+        var expected = values[findValue];
         var tree = InsertTestNodes(values);
-        var size = tree.GetSize();
-
-        Assert.Equal(expected, size);
+        var actual = tree.Find(values[findValue]);
+        
+        Assert.Equal(expected, actual.GetData());
+    }
+    [Theory]
+    [InlineData(new [] {1 , 2, 3}, 2)]
+    [InlineData(new [] {1, 2, 3, 5, 9, 7, -2}, 3)]
+    public void Depth_ShouldReturnDepth(int[] values, int findValue)
+    {
+        var tree = InsertTestNodes(values);
+        var node = tree.Find(values[findValue]);
+        var expected = tree.Height(node);
+        var actual = tree.Find(values[findValue]);
+        
+        Assert.Equal(expected, actual.GetDepth());
     }
 
     
