@@ -5,15 +5,46 @@ namespace Algorithms.Algorithms;
 public class AdpTree
 {
     private AdpNode _root;
-
+    public AdpTree()
+    {
+    }
     public AdpTree(AdpNode root)
     {
         this._root = root;
     }
-
-    public AdpTree()
+    public class AdpNode
     {
+        public int _height;
+
+        public int ListDepth
+        {
+            get => _height;
+            set => _height = value;
+        }
+
+        public AdpNode _childRight;
+        public AdpNode _childLeft;
+        public int _data;
+
+        public AdpNode(int data)
+        {
+            _data = data;
+        }
+        public AdpNode(int data, int height)
+        {
+            _data = data;
+            _height = height;
+        }
+        public AdpNode(int data = default ,AdpNode childLeft = null
+            , AdpNode childRight = null ,int depth = default)
+        {
+            _data = data;
+            _childLeft = childLeft;
+            _childRight = childRight;
+            _height = 0;
+        }
     }
+
 
     public void Insert(int data)
     {
@@ -27,21 +58,20 @@ public class AdpTree
         {
             return new AdpNode(data);
         }
-        else if (node.GetData() > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
+        else if (node._data > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
         {
-            node.SetLeftChild(Insert(node.GetLeftChild(), data));
-            // node.GetLeftChild().SetDepth(childNodeDepth);
+            node._childLeft = Insert(node._childLeft, data);
         }
-        else if (node.GetData() < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
+        else if (node._data < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
         {
-            node.SetRightChild(Insert(node.GetRightChild(), data));
-            // node.GetRightChild().SetDepth(childNodeDepth);
+            node._childRight = Insert(node._childRight, data);
         }
         else
         {
             throw new Exception("data already exists!");
         }
-// // # Work out the hieght of the current node after the insertion
+        
+// // # Work out the hegiht of the current node after the insertion
 //         if (node.GetLeftChild() != null)
 //         {
 //             node.GetLeftChild().SetDepth(node.GetLeftChild().GetDepth());
@@ -61,53 +91,48 @@ public class AdpTree
 //             {
 //                 node.SetDepth(node.GetRightChild().GetDepth() + 1);
 //             };
-
+            UpdateHeight(node);
             return node; // return rebalance(node);
     }
 
-    public int height()
+    public int Height()
     {
-        return _root == null ? -1 : _root.GetDepth();
+        return _root == null ? -1 : _root._height;
     }
-
     public int Height(AdpNode node)
     {
-        return node == null ? -1 : node.GetDepth();
+        return node == null ? -1 : node._height;
     }
-
+    private void UpdateHeight(AdpNode node) {
+        node._height = 1 + Math.Max(Height(node._childLeft), Height(node._childRight));
+    }
+    
     public AdpNode Find(int data)
     {
         var node = _root;
         while (node != null)
         {
-            if (node.GetData() == data)
+            if (node._data == data)
             {
                 break;
             }
-
-            node = node.GetData() < data ? node.GetRightChild() : node.GetLeftChild();
+            node = node._data < data ? node._childRight : node._childLeft;
         }
-
         return node;
     }
-
+    
     public int GetSize()
     {
         return GetSizeRecursive(_root);
     }
-
+    
     private int GetSizeRecursive(AdpNode node)
     {
-        int size;
         if (node == null)
         {
             return 0;
         }
-        else
-        {
-            size = GetSizeRecursive(node.GetLeftChild()) + 1 + GetSizeRecursive(node.GetRightChild());
-        }
-
+        var size = GetSizeRecursive(node._childLeft) + 1 + GetSizeRecursive(node._childRight);
         return size;
     }
 
@@ -117,4 +142,6 @@ public class AdpTree
         get => _root;
         set => _root = value ?? throw new ArgumentNullException(nameof(value));
     }
+
+
 }
