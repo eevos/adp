@@ -15,7 +15,7 @@ public class AdpAVLTreeTest
     {
         var expected = new List<int>(values);
         var tree = InsertTestNodes(values);
-        var dataRightChild = tree.ListRoot._childRight._childRight._data;
+        var dataRightChild = tree.ListRoot.ListChildRight.ListChildRight.Data;
         
         Assert.Equal(expected[2], dataRightChild);
     }
@@ -47,18 +47,18 @@ public class AdpAVLTreeTest
         var tree = InsertTestNodes(values);
         var actual = tree.Find(findValue);
         
-        Assert.Equal(expected, actual._data);
+        Assert.Equal(expected, actual.Data);
     }
     [Theory]
     [InlineData(new [] {1}, 1)]
-    public void SetDepth_ShouldReturn_ExpectedHeight<T>(int[] values, int height)
+    public void SetHeight_ShouldReturn_ExpectedHeight<T>(int[] values, int height)
     {
         var expected = values[0];
         var sut = new AdpTree();
         sut.Insert(values[0]);
-        sut.ListRoot._height = height;
+        sut.ListRoot.ListHeight = height;
         
-        Assert.Equal(expected, sut.ListRoot._height);
+        Assert.Equal(expected, sut.ListRoot.ListHeight);
     }
     [Theory]
     [InlineData(-1)]

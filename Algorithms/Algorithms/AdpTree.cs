@@ -14,34 +14,26 @@ public class AdpTree
     }
     public class AdpNode
     {
-        public int _height;
-
-        public int ListDepth
-        {
-            get => _height;
-            set => _height = value;
-        }
-
-        public AdpNode _childRight;
-        public AdpNode _childLeft;
-        public int _data;
-
+        public int ListHeight { get; set; }
+        public AdpNode ListChildRight { get; set; }
+        public AdpNode ListChildLeft { get; set; }
+        public int Data;
+        
         public AdpNode(int data)
         {
-            _data = data;
+            Data = data;
         }
         public AdpNode(int data, int height)
         {
-            _data = data;
-            _height = height;
+            Data = data;
+            ListHeight = height;
         }
         public AdpNode(int data = default ,AdpNode childLeft = null
             , AdpNode childRight = null ,int depth = default)
         {
-            _data = data;
-            _childLeft = childLeft;
-            _childRight = childRight;
-            _height = 0;
+            Data = data;
+            ListChildLeft = childLeft;
+            ListChildRight = childRight;
         }
     }
 
@@ -58,13 +50,13 @@ public class AdpTree
         {
             return new AdpNode(data);
         }
-        else if (node._data > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
+        else if (node.Data > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
         {
-            node._childLeft = Insert(node._childLeft, data);
+            node.ListChildLeft = Insert(node.ListChildLeft, data);
         }
-        else if (node._data < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
+        else if (node.Data < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
         {
-            node._childRight = Insert(node._childRight, data);
+            node.ListChildRight = Insert(node.ListChildRight, data);
         }
         else
         {
@@ -97,26 +89,31 @@ public class AdpTree
 
     public int Height()
     {
-        return _root == null ? -1 : _root._height;
+        return _root == null ? -1 : _root.ListHeight;
     }
     public int Height(AdpNode node)
     {
-        return node == null ? -1 : node._height;
+        return node == null ? -1 : node.ListHeight;
     }
     private void UpdateHeight(AdpNode node) {
-        node._height = 1 + Math.Max(Height(node._childLeft), Height(node._childRight));
+        node.ListHeight = 1 + Math.Max(Height(node.ListChildLeft), Height(node.ListChildRight));
     }
-    
+    public int GetBalance(AdpNode node)
+    {
+        if (node == null) return 0;
+        return Height(node.ListChildLeft) - Height(node.ListChildRight);
+    }
+
     public AdpNode Find(int data)
     {
         var node = _root;
         while (node != null)
         {
-            if (node._data == data)
+            if (node.Data == data)
             {
                 break;
             }
-            node = node._data < data ? node._childRight : node._childLeft;
+            node = node.Data < data ? node.ListChildRight : node.ListChildLeft;
         }
         return node;
     }
@@ -132,11 +129,10 @@ public class AdpTree
         {
             return 0;
         }
-        var size = GetSizeRecursive(node._childLeft) + 1 + GetSizeRecursive(node._childRight);
+        var size = GetSizeRecursive(node.ListChildLeft) + 1 + GetSizeRecursive(node.ListChildRight);
         return size;
     }
-
-
+    
     public AdpNode ListRoot
     {
         get => _root;
