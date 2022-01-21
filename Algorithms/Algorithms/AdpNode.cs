@@ -3,74 +3,77 @@
 
 public class AdpNode
 {
-    private int _depth;
+    public int _depth;
     private AdpNode _childRight;
     private AdpNode _childLeft;
-    private AdpNode _parent;
+    // private AdpNode _parent;
     private int _data;
 
     public AdpNode(int data)
     {
-        this._data = data;
+        _data = data;
+        _depth = 0;
     }
-    public AdpNode(int data = default, 
-        AdpNode parent = null, AdpNode childLeft = null,
-        AdpNode childRight = null, int depth = default)
+    public AdpNode(int data = default
+        // , AdpNode parent = null
+        ,AdpNode childLeft = null,
+        AdpNode childRight = null
+        ,int depth = default)
     {
-        this._data = data;
-        this._parent = parent;
-        this._childLeft = childLeft;
-        this._childRight = childRight;
-        this._depth = depth;
+        _data = data;
+        // _parent = parent;
+        _childLeft = childLeft;
+        _childRight = childRight;
+        _depth = 0;
     }
 
     public void SetDepth(int depth)
     {
-        this._depth = depth;
+        _depth = depth;
     }
 
     public int GetDepth()
     {
-        return this._depth;
+        return _depth;
     }
 
     public int GetData()
     {
-        return this._data;
+        return _data;
     }
 
     public void SetData(int data)
     {
-        this._data = data;
+        _data = data;
     }
 
-    public AdpNode GetParent()
-    {
-        return this._parent;
-    }
+    // public AdpNode GetParent()
+    // {
+    //     // return _parent;
+    // }
 
-    public void SetParent(AdpNode parent)
-    {
-        this._parent = parent;
-    }
+    // public void SetParent(AdpNode parent)
+    // {
+    //     _parent = parent;
+    // }
 
     public AdpNode GetLeftChild()
     {
-        return this._childLeft;
+        return _childLeft;
     }
 
     public void SetLeftChild(AdpNode childLeft)
     {
-        this._childLeft = childLeft;
+        _childLeft = childLeft;
     }
 
     public AdpNode GetRightChild()
     {
-        return this._childRight;
+        return _childRight;
     }
 
     public void SetRightChild(AdpNode childRight)
     {
-        this._childRight = childRight;
+        _childRight = childRight;
     }
 }

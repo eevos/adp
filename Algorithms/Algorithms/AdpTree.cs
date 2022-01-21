@@ -10,51 +10,84 @@ public class AdpTree
     {
         this._root = root;
     }
+
     public AdpTree()
     {
     }
 
     public void Insert(int data)
-    {   
-        _root = Insert(_root, data);    //recursief nodes toevoegen, iedere node is meteen ook een root
+    {
+        _root = Insert(_root, data); //recursief nodes toevoegen, iedere node is meteen ook een root
     }
 
     public AdpNode Insert(AdpNode node, int data)
     {
-        if (node == null)       // Als er nog geen rootNode is maak je een nieuwe rootNode
+        // int childNodeDepth = node.GetDepth() + 1;
+        if (node == null) // Als er nog geen rootNode is maak je een nieuwe rootNode
         {
             return new AdpNode(data);
         }
-        else if (node.GetData() > data)     //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
+        else if (node.GetData() > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
         {
-            node.SetLeftChild(Insert(node.GetLeftChild(),data));
+            node.SetLeftChild(Insert(node.GetLeftChild(), data));
+            // node.GetLeftChild().SetDepth(childNodeDepth);
         }
-        else if (node.GetData() < data)     //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
+        else if (node.GetData() < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
         {
-            node.SetRightChild(Insert(node.GetRightChild(),data)); 
+            node.SetRightChild(Insert(node.GetRightChild(), data));
+            // node.GetRightChild().SetDepth(childNodeDepth);
         }
         else
         {
             throw new Exception("data already exists!");
         }
-        return node;    // return rebalance(node);
+// // # Work out the hieght of the current node after the insertion
+//         if (node.GetLeftChild() != null)
+//         {
+//             node.GetLeftChild().SetDepth(node.GetLeftChild().GetDepth());
+//         }
+//
+//         if (node.GetRightChild() != null)
+//         {
+//             node.GetRightChild().SetDepth(node.GetRightChild().GetDepth());
+//         }
+//
+// // # Calculate the height after the recursive call is made
+//             if (node.GetLeftChild().GetDepth() > node.GetRightChild().GetDepth())
+//             {
+//                 node.SetDepth(node.GetLeftChild().GetDepth() + 1);
+//             }
+//             else
+//             {
+//                 node.SetDepth(node.GetRightChild().GetDepth() + 1);
+//             };
+
+            return node; // return rebalance(node);
+    }
+
+    public int height()
+    {
+        return _root == null ? -1 : _root.GetDepth();
+    }
+
+    public int Height(AdpNode node)
+    {
+        return node == null ? -1 : node.GetDepth();
     }
 
     public AdpNode Find(int data)
     {
         var node = _root;
-        if (node.GetData() == data)
+        while (node != null)
         {
-            return node;
+            if (node.GetData() == data)
+            {
+                break;
+            }
+
+            node = node.GetData() < data ? node.GetRightChild() : node.GetLeftChild();
         }
-        else if (node.GetData() < data)
-        {
-            Find(node.GetRightChild().GetData());
-        }
-        else
-        {
-            Find(node.GetLeftChild().GetData());
-        }
+
         return node;
     }
 
@@ -65,7 +98,7 @@ public class AdpTree
 
     private int GetSizeRecursive(AdpNode node)
     {
-        int size; 
+        int size;
         if (node == null)
         {
             return 0;
@@ -74,10 +107,11 @@ public class AdpTree
         {
             size = GetSizeRecursive(node.GetLeftChild()) + 1 + GetSizeRecursive(node.GetRightChild());
         }
+
         return size;
     }
-    
-    
+
+
     public AdpNode ListRoot
     {
         get => _root;
