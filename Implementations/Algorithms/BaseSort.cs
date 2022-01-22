@@ -7,6 +7,7 @@ public abstract class BaseSort<T>
         try
         {
             var comparer = Comparer<T>.Default;
+            
             return comparer.Compare(a, b) >= 0;
         }
         catch (ArgumentException e)
@@ -20,7 +21,7 @@ public abstract class BaseSort<T>
         return (left + right) / 2;
     }
     
-    protected static void Swap(ref T[] array, int index1, int index2)
+    protected static void Swap(T[] array, int index1, int index2)
     {
         (array[index2], array[index1]) = (array[index1], array[index2]);
     }

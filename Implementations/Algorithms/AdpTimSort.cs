@@ -2,7 +2,7 @@
 
 public class AdpTimSort<T> : BaseSort<T>
 {
-    public static void Sort(ref T[] array)
+    public static void Sort(T[] array)
     {
         
     }

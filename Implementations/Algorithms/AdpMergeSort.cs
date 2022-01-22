@@ -2,19 +2,19 @@
 
 public class AdpMergeSort<T> : BaseSort<T>
 {
-    public static void Sort(ref T[] array, int left, int right)
+    public static void Sort(T[] array, int leftIndex, int rightIndex)
     {
-        if (array.Length == 0 || left >= right) return;
+        if (array.Length == 0 || leftIndex >= rightIndex) return;
 
-        var pivot = FindPivot(left, right);
+        var pivot = FindPivot(leftIndex, rightIndex);
 
-        Sort(ref array, left, pivot);
-        Sort(ref array, pivot + 1, right);
+        Sort(array, leftIndex, pivot);
+        Sort(array, pivot + 1, rightIndex);
 
-        Merge(ref array, left, pivot, right);
+        Merge(array, leftIndex, pivot, rightIndex);
     }
 
-    private static void Merge(ref T[] array, int left, int pivot, int right)
+    private static void Merge(T[] array, int left, int pivot, int right)
     {
         var (leftArray, rightArray) = Partition(array, left, pivot, right);
         

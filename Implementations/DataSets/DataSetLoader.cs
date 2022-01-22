@@ -13,9 +13,21 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent?.FullName;
         if (projectDirectory == null) throw new Exception("Could not find project directory");
         var dataSetDirectory = Path.Combine(projectDirectory, "Implementations/DataSets");
-        
 
-        var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
+        string text;
+        // check if type T is DsSortDto
+        if (typeof(T) == typeof(DsSortDto) || typeof(T) == typeof(DsIntSortDto))
+        {
+            text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
+        } else if (typeof(T) == typeof(DsHashDto))
+        {
+            text = File.ReadAllText(dataSetDirectory + "/dataset_hashing.json");
+        }
+        else
+        {
+            throw new Exception("Type T is not supported");
+        }
+        
 
         DataSet = JsonConvert.DeserializeObject<T>(text);
     }

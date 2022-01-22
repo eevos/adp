@@ -13,16 +13,17 @@ public class AdpSortTest
     public void Sort_AdpInsertionSort_Test<T>(T[] values)
     {
         var list = new List<T>(values);
-
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
+        
+        // check if T is object
+        if (typeof(T).Name == "Object" && !typeof(IComparable).IsAssignableFrom(typeof(T)))
         {
-            Assert.Throws<InvalidOperationException>(() => AdpInsertionSort<T>.Sort(ref values));
+            Assert.Throws<InvalidOperationException>(() => AdpInsertionSort<T>.Sort(values));
             return;
         }
-
+        
         list.Sort();
 
-        AdpInsertionSort<T>.Sort(ref values);
+        AdpInsertionSort<T>.Sort(values);
         Assert.Equal(list.ToArray(), values);
     }
 
@@ -32,15 +33,15 @@ public class AdpSortTest
     {
         var list = new List<T>(values);
 
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
+        if (typeof(T).Name == "Object" && !typeof(IComparable).IsAssignableFrom(typeof(T)))
         {
-            Assert.Throws<InvalidOperationException>(() => AdpSelectionSort<T>.Sort(ref values));
+            Assert.Throws<InvalidOperationException>(() => AdpSelectionSort<T>.Sort(values));
             return;
         }
 
         list.Sort();
 
-        AdpSelectionSort<T>.Sort(ref values);
+        AdpSelectionSort<T>.Sort(values);
         Assert.Equal(list.ToArray(), values);
     }
 
@@ -50,17 +51,19 @@ public class AdpSortTest
     {
         var list = new List<T>(values);
 
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
+        if (CanDataBeCompared<T>())
         {
-            Assert.Throws<InvalidOperationException>(() => AdpQuickSort<T>.Sort(ref values, 0, values.Length - 1));
+            Assert.Throws<InvalidOperationException>(() => AdpQuickSort<T>.Sort(values, 0, values.Length - 1));
             return;
         }
 
         list.Sort();
 
-        AdpQuickSort<T>.Sort(ref values, 0, values.Length - 1);
+        AdpQuickSort<T>.Sort(values, 0, values.Length - 1);
         Assert.Equal(list.ToArray(), values);
     }
+
+    
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
@@ -68,15 +71,14 @@ public class AdpSortTest
     {
         var list = new List<T>(values);
 
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
-        {
-            Assert.Throws<InvalidOperationException>(() => AdpMergeSort<T>.Sort(ref values, 0, values.Length - 1));
+        if (CanDataBeCompared<T>())        {
+            Assert.Throws<InvalidOperationException>(() => AdpMergeSort<T>.Sort(values, 0, values.Length - 1));
             return;
         }
 
         list.Sort();
 
-        AdpMergeSort<T>.Sort(ref values, 0, values.Length - 1);
+        AdpMergeSort<T>.Sort(values, 0, values.Length - 1);
         Assert.Equal(list.ToArray(), values);
     }
 
@@ -86,8 +88,7 @@ public class AdpSortTest
     {
         var list = new List<T>(values);
 
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
-        {
+        if (CanDataBeCompared<T>())        {
             Assert.Throws<InvalidOperationException>(() => AdpParallelMergeSort<T>.Sort(values, 0, values.Length - 1));
             return;
         }
@@ -99,24 +100,6 @@ public class AdpSortTest
     }
 
     [Theory]
-    [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    public void Sort_AdpTimSort_Test<T>(T[] values)
-    {
-        var list = new List<T>(values);
-
-        if (!typeof(IComparable).IsAssignableFrom(typeof(T)))
-        {
-            Assert.Throws<InvalidOperationException>(() => AdpTimSort<T>.Sort(ref values));
-            return;
-        }
-
-        list.Sort();
-
-        AdpTimSort<T>.Sort(ref values);
-        Assert.Equal(list.ToArray(), values);
-    }
-    
-    [Theory]
     [ClassData(typeof(DataSetLoader<DsIntSortDto>))]
     public void Sort_AdpRadixSort_Test(int[] values)
     {
@@ -124,8 +107,12 @@ public class AdpSortTest
 
         list.Sort();
 
-        AdpRadixSort<int>.Sort(ref values);
+        AdpRadixSort<int>.Sort(values);
         Assert.Equal(list.ToArray(), values);
     }
-
+    
+    private static bool CanDataBeCompared<T>()
+    {
+        return typeof(T).Name == "Object" && !typeof(IComparable).IsAssignableFrom(typeof(T));
+    }
 }

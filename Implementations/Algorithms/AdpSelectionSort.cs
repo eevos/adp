@@ -2,7 +2,7 @@
 
 public class AdpSelectionSort<T> : BaseSort<T>
 {
-    public static void Sort(ref T[] array)
+    public static void Sort(T[] array)
     {
         var length = array.Length;
         var comparer = Comparer<T>.Default;
@@ -19,7 +19,7 @@ public class AdpSelectionSort<T> : BaseSort<T>
                         maxIndex = j;
                     }
 
-                    Swap(ref array, maxIndex, length - i - 1);
+                    Swap(array, maxIndex, length - i - 1);
                 }
                 catch (ArgumentException e)
                 {

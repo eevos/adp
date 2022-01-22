@@ -4,7 +4,7 @@ namespace Implementations.Algorithms;
 
 public class AdpRadixSort<T> : BaseSort<T>
 {
-    public static void Sort(ref int[] array)
+    public static void Sort(int[] array)
     {
         var tempArray = new int[array.Length];
         
@@ -47,6 +47,20 @@ public class AdpRadixSort<T> : BaseSort<T>
         return (item / charPosition) % numberOfBuckets;
     }
 
+    // private static int GetNumberOfPossibleCharacters()
+    // {
+    //     return typeof(T).Name switch
+    //     {
+    //         "Int32" => 10,
+    //         "String" => (T)Convert.ChangeType("notInArray", typeof(T)),
+    //         "Boolean" => (T)Convert.ChangeType(true, typeof(T)),
+    //         "Single" => (T)Convert.ChangeType(99999999, typeof(T)),
+    //         "Object" => (T)Convert.ChangeType("notInArray", typeof(T)),
+    //         "Nullable`1" => (T)Convert.ChangeType(99993434, Nullable.GetUnderlyingType(typeof(T))!),
+    //         _ => throw new Exception("Type not supported")
+    //     }; 
+    // };
+
     private static int GetMaxItemLenght(int[] array)
     {
         var minLength = array.Min().ToString().Length;
@@ -59,4 +73,6 @@ public class AdpRadixSort<T> : BaseSort<T>
     {
         return array.Min() < 0 ? 19 : 10;
     }
+    
+    
 }

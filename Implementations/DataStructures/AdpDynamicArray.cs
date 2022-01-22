@@ -5,24 +5,24 @@ namespace Implementations.DataStructures;
 public class AdpDynamicArray<T> : IEnumerable<T>
 {
     private T[] items;
-    private int size;
+    private int _size;
 
     public AdpDynamicArray()
     {
         items = Array.Empty<T>();
-        size = 0;
+        _size = 0;
     }
 
     public AdpDynamicArray(int capacity)
     {
         items = new T[capacity];
-        size = capacity;
+        _size = capacity;
     }
 
     public AdpDynamicArray(IEnumerable<T> collection)
     {
         items = collection.ToArray();
-        size = items.Length;
+        _size = items.Length;
     }
 
     public int Capacity => items.Length;
@@ -45,34 +45,34 @@ public class AdpDynamicArray<T> : IEnumerable<T>
 
     public int Count()
     {
-        return size;
+        return _size;
     }
 
     public void Add(T item)
     {
-        Grow(size + 1);
-        items[size] = item;
-        size++;
+        Grow(_size + 1);
+        items[_size] = item;
+        _size++;
     }
 
     public void Add(T[] collection)
     {
-        Grow(size + collection.Length);
-        Array.Copy(collection, 0, items, size, collection.Length);
-        size += collection.Length;
+        Grow(_size + collection.Length);
+        Array.Copy(collection, 0, items, _size, collection.Length);
+        _size += collection.Length;
     }
 
     public T Pop()
     {
-        var item = items[size - 1];
-        RemoveAt(size - 1);
+        var item = items[_size - 1];
+        RemoveAt(_size - 1);
         return item;
     }
 
     public void Clear()
     {
         items = Array.Empty<T>();
-        size = 0;
+        _size = 0;
     }
 
     public bool Contains(T item)
@@ -87,10 +87,10 @@ public class AdpDynamicArray<T> : IEnumerable<T>
 
     public void Insert(int index, T item)
     {
-        Grow(size + 1);
-        Array.Copy(items, index, items, index + 1, size - index);
+        Grow(_size + 1);
+        Array.Copy(items, index, items, index + 1, _size - index);
         items[index] = item;
-        size++;
+        _size++;
     }
 
     public bool Remove(T item)
@@ -103,37 +103,34 @@ public class AdpDynamicArray<T> : IEnumerable<T>
 
     public bool RemoveAt(int index)
     {
-        Shrink(size - 1);
-        Array.Copy(items, index + 1, items, index, size - index - 1);
-        size--;
+        Shrink(_size - 1);
+        Array.Copy(items, index + 1, items, index, _size - index - 1);
+        _size--;
         return true;
     }
 
     public T[] ToArray()
     {
-        var newItems = new T[size];
-        for (var i = 0; i < size; i++) newItems[i] = items[i];
+        var newItems = new T[_size];
+        for (var i = 0; i < _size; i++) newItems[i] = items[i];
 
         return newItems;
     }
 
     private void Grow(int newSize)
     {
-        if (newSize >= items.Length)
-        {
-            var newItems = new T[newSize * 2];
-            Array.Copy(items, newItems, size);
-            items = newItems;
-        }
+        if (newSize < items.Length) return;
+        
+        var newItems = new T[newSize * 2];
+        Array.Copy(items, newItems, _size);
+        items = newItems;
     }
 
     private void Shrink(int newSize)
     {
-        if (newSize < items.Length / 2)
-        {
-            var newItems = new T[(int)Math.Ceiling((double)items.Length / 2)];
-            Array.Copy(items, newItems, size);
-            items = newItems;
-        }
+        if (newSize >= items.Length / 2) return;
+        var newItems = new T[(int)Math.Ceiling((double)items.Length / 2)];
+        Array.Copy(items, newItems, _size);
+        items = newItems;
     }
 }
