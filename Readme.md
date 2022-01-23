@@ -28,9 +28,7 @@ DataStructures
   - Not implemented
 - AdpStack
 - AdpGraph
-  - Not implemented
 - AdpHashTable
-  - Not implemented
 - AdpBinaryTreeAVL
   - Not implemented
   - With search

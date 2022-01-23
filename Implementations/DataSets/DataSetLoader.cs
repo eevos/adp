@@ -22,6 +22,11 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         } else if (typeof(T) == typeof(DsHashDto))
         {
             text = File.ReadAllText(dataSetDirectory + "/dataset_hashing.json");
+        } else if (typeof(T) == typeof(DsGraphMatrixDto) 
+                   || typeof(T) == typeof(DsGraphLineDto) 
+                   || typeof(T) == typeof(DsGraphListDto))
+        {
+            text = File.ReadAllText(dataSetDirectory + "/dataset_grafen.json");
         }
         else
         {

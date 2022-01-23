@@ -6,6 +6,9 @@ public class AdpParallelMergeSort<T> : BaseSort<T>
     {
         if (array.Length == 0 || left >= right) return;
 
+        // Added so that the merge sort is not parallelized, when the array is small
+        if (array.Length <= 8) isParallel = true;
+
         var pivot = FindPivot(left, right);
 
         if (!isParallel)
