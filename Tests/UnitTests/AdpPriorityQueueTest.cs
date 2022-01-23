@@ -1,4 +1,6 @@
-﻿using Implementations.DataSets;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using Implementations.DataSets;
 using Implementations.DataStructures;
 using Xunit;
 
@@ -6,15 +8,36 @@ namespace Tests.UnitTests;
 
 public class AdpPriorityQueueTest : BaseListTest
 {
-    // [Theory]
-    // [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    // public void Add_ShouldAddItemToQueue<T>(T[] values)
-    // {
-    //     var sut = new AdpPriorityQueue<T,T>();
-    //
-    //     sut.Enqueue(values[0], values[0]);
-    //
-    //     // Assert
-    //     Assert.Equal(1, sut[0]);
-    // }
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsIntSortDto>))]
+    public void Enqueue_ShouldAddItemToQueue<T>(T[] values)
+    {
+        var sut = new AdpPriorityQueue<T,T>();
+
+        foreach (var value in values)
+        {
+            sut.Enqueue(value, value);
+        }
+        
+        var valuesInList = new List<T>(values);
+        valuesInList.Sort();
+        Assert.Equal(valuesInList[0], sut.Peek());
+    }
+    
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsIntSortDto>))]
+    public void Dequeue_ShouldRemoveItemFromQueue<T>(T[] values)
+    {
+        var sut = new AdpPriorityQueue<T,T>();
+
+        foreach (var value in values)
+        {
+            sut.Enqueue(value, value);
+        }
+        
+        var valuesInList = new List<T>(values);
+        valuesInList.Sort();
+        
+        Assert.Equal(valuesInList[0], sut.Dequeue()); 
+    }
 }

@@ -21,7 +21,7 @@ public class AdpDijkstraTest
         AdpDijkstra.FindShortestPath(graph, 0, distances);
         
         var isWeighted = values.GetLength(0) == 5;
-        var expectedDistances = isWeighted ? getExpectedWeightedDijkstraDistances() : getExpectedDijkstraDistances();
+        var expectedDistances = isWeighted ? GetExpectedWeightedDijkstraDistances() : GetExpectedDijkstraDistances();
         for (var i = 0; i < distances.Length; i++)
         {
             Assert.Equal(expectedDistances[i].Distance, distances[i].Distance);
@@ -30,7 +30,7 @@ public class AdpDijkstraTest
         }
     }
 
-    private DijkstraDistance[] getExpectedWeightedDijkstraDistances()
+    private static DijkstraDistance[] GetExpectedWeightedDijkstraDistances()
     {
         return new DijkstraDistance[]
         {
@@ -42,7 +42,7 @@ public class AdpDijkstraTest
         };
     }
 
-    private DijkstraDistance[] getExpectedDijkstraDistances()
+    private static DijkstraDistance[] GetExpectedDijkstraDistances()
     {
             return new DijkstraDistance[]
         {
@@ -55,5 +55,4 @@ public class AdpDijkstraTest
             new(4, 5, true),
         };
     }
-    
 }
