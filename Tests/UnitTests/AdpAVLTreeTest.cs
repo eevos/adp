@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Algorithms.Algorithms;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
 using Tests.DataSets;
 using Xunit;
 
@@ -40,6 +41,7 @@ public class AdpAVLTreeTest
     }
     [Theory]
     [InlineData(new [] {1, 2, 3}, 2)]
+    [InlineData(new [] {1, 2, 3}, 3)]
     [InlineData(new [] {1, 2, 3, 5, 9, 7, -2}, -2)]
     public void Find_ShouldReturnInsertedNode(int[] values, int findValue)
     {
@@ -71,7 +73,7 @@ public class AdpAVLTreeTest
     }
     [Theory]
     [InlineData(new [] {1}, 0)]
-    public void TreeWithRoot_ShouldReturnHeight_1<T>(int[] values, int height)
+    public void TreeWithRoot_ShouldReturnHeight_0<T>(int[] values, int height)
     {
         var expected = height;
         var sut = new AdpTree();
@@ -81,8 +83,6 @@ public class AdpAVLTreeTest
     }
     [Theory]
     [InlineData(new [] {1, 2}, (1))]
-    // [InlineData(new [] {1, 2,3}, (2))]
-    // [InlineData(new [] {1, 2,3,4}, (3))]
     public void InsertTwoNodes_ShouldReturnHeight_1<T>(int[] values, int height)
     {
         var expected = height;
@@ -90,18 +90,25 @@ public class AdpAVLTreeTest
         
         Assert.Equal(expected, sut.Height());
     }
-    // [Theory]
-    // [InlineData(new [] {1 , 2, 3}, 2)]
-    // [InlineData(new [] {1, 2, 3, 5, 9, 7, -2}, 3)]
-    // public void Depth_ShouldReturnDepth(int[] values, int findValue)
-    // {
-    //     var tree = InsertTestNodes(values);
-    //     var node = tree.Find(values[findValue]);
-    //     var expected = tree.Height(node);
-    //     var actual = tree.Find(values[findValue]);
-    //     
-    //     Assert.Equal(expected, actual.GetDepth());
-    // }
+    [Theory]
+    [InlineData(1, 2, 3)]
+    public void GetBalance_ShouldReturn_Int<T>(params int[] values)
+    {
+            
+    }
+    
+    [Theory]
+    [InlineData(new[] {1, 2, 3}, 3)]
+    public void DeleteNode_FindShouldNotReturnNode<T>(int[] values, int deleteValue)
+    {
+        var expected = deleteValue;
+        var sut = InsertTestNodes(values);
+        // sut.delete(deleteValue);
+        
+        Assert.Null(sut.Find(deleteValue));
+    }
+    
+    
     public AdpTree InsertTestNodes(int[] data)
     {
         var tree = new AdpTree();
@@ -111,4 +118,5 @@ public class AdpAVLTreeTest
         }
         return tree;
     }
+    
 }
