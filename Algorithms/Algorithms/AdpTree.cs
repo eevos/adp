@@ -4,23 +4,14 @@ namespace Algorithms.Algorithms;
 
 public class AdpTree
 {
-    private AdpNode _root;
-
-    public AdpTree()
-    {
-    }
-
-    public AdpTree(AdpNode root)
-    {
-        this._root = root;
-    }
-
+    public AdpNode ListRoot { get; set; }
+    
     public class AdpNode
     {
         public int ListHeight { get; set; }
-        public AdpNode ListChildRight { get; set; }
-        public AdpNode ListChildLeft { get; set; }
-        public int Data;
+        public AdpNode? Right { get; set; }
+        public AdpNode? Left { get; set; }
+        public int Data { get; set; }
 
         public AdpNode(int data)
         {
@@ -32,48 +23,127 @@ public class AdpTree
             Data = data;
             ListHeight = height;
         }
-
-        public AdpNode(int data = default, AdpNode childLeft = null
-            , AdpNode childRight = null, int depth = default)
-        {
-            Data = data;
-            ListChildLeft = childLeft;
-            ListChildRight = childRight;
-        }
     }
-
 
     public void Insert(int data)
     {
-        _root = Insert(_root, data); //recursief nodes toevoegen, iedere node is meteen ook een root
+        ListRoot = Insert(ListRoot, data); //recursief nodes toevoegen, iedere node is meteen ook een root
     }
 
-    public AdpNode Insert(AdpNode node, int data)
+    public AdpNode Insert(AdpNode? node, int data)
     {
         if (node == null) // Als er nog geen rootNode is maak je een nieuwe rootNode
         {
             return new AdpNode(data);
         }
-        else if (node.Data > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
+        if (node.Data > data) //data uit rootNode groter dan ingezonden data? nieuwe node is childLeft
         {
-            node.ListChildLeft = Insert(node.ListChildLeft, data);
+            node.Left = Insert(node.Left, data);
         }
         else if (node.Data < data) //data uit rootNode kleiner dan ingezonden data? nieuwe node is childRight
         {
-            node.ListChildRight = Insert(node.ListChildRight, data);
+            node.Right = Insert(node.Right, data);
         }
         else
         {
             throw new Exception("data already exists!");
         }
-        // UpdateHeight(node);
-        // return node; //
-        return Rebalance(node);
+        UpdateHeight(node);
+        int balance = GetBalance(node);
+        if (balance > 1 && node.Data < node.Left.Data)
+        {
+            return RotateRight(node);
+        }
+        
+        if (balance < -1 && node.Data > node.Right.Data)
+        {
+            return RotateLeft(node);
+        }
+        
+        if (balance > 1 && node.Data > node.Left.Data)
+        {
+            node.Left = RotateLeft(node.Left);
+            return RotateRight(node);
+        }
+        
+        if (balance < -1 && node.Data < node.Right.Data)
+        {
+            node.Right = RotateRight(node.Right);
+            return RotateLeft(node);
+        }
+        return node;
+        // return Rebalance(node);
     }
-    
+    // private AdpNode Rebalance(AdpNode node)
+    // {
+    //     UpdateHeight(node);
+    //     int balance = GetBalance(node);
+    //
+    //     if (balance > 1 && node.Data < node.Left.Data)
+    //     {
+    //         return RotateRight(node);
+    //     }
+    //     
+    //     if (balance < -1 && node.Data > node.Right.Data)
+    //     {
+    //         return RotateLeft(node);
+    //     }
+    //     
+    //     if (balance > 1 && node.Data > node.Left.Data)
+    //     {
+    //         node.Left = RotateLeft(node.Left);
+    //         return RotateRight(node);
+    //     }
+    //     
+    //     if (balance < -1 && node.Data < node.Right.Data)
+    //     {
+    //         node.Right = RotateRight(node.Right);
+    //         return RotateLeft(node);
+    //     }
+    //     
+    //     return node;
+    // }
+    private AdpNode RotateRight(AdpNode node) {
+        var left = node.Left;
+        var leftRight = left?.Right;
+        left!.Right = node;
+        node.Left = leftRight;
+        UpdateHeight(node);
+        UpdateHeight(left);
+        return left;
+    }
+    private AdpNode RotateLeft(AdpNode node) {
+        var right = node.Right;
+        var rightLeft = right?.Left;
+        right!.Left = node;
+        node.Right = rightLeft;
+        UpdateHeight(node);
+        UpdateHeight(right);
+        return right;
+    }
+    private void UpdateHeight(AdpNode node)
+    {
+        node.ListHeight = 1 + Math.Max(Height(node.Left), Height(node.Right));
+    }
+    public int Height()
+    {
+        return ListRoot?.ListHeight ?? -1;
+    }
+
+    public int Height(AdpNode? node)
+    {
+        return node == null ? -1 : node.ListHeight;
+    }
+
+
+    public int GetBalance(AdpNode? node)
+    {
+        if (node == null) return 0;
+        return Height(node.Left) - Height(node.Right);
+    }
     public AdpNode Find(int data)
     {
-        var node = _root;
+        var node = ListRoot;
         while (node != null)
         {
             if (node.Data == data)
@@ -81,133 +151,68 @@ public class AdpTree
                 break;
             }
 
-            node = node.Data < data ? node.ListChildRight : node.ListChildLeft;
+            node = node.Data < data ? node.Right : node.Left;
         }
 
         return node;
     }
 
-    public void Delete(int data)
-    {
-        _root = Delete(_root, data);
-    }
-
-    public AdpNode Delete(AdpNode node, int data)
-    {
-        // Base case
-        if (node == null) return node;
-        else if (node.Data > data)
-        {
-            node.ListChildLeft = Delete(node.ListChildLeft, data);
-        }
-        else if (node.Data < data)
-        {
-            node.ListChildRight = Delete(node.ListChildRight, data);
-        }
-        else
-        {
-            if (node.ListChildLeft == null || node.ListChildRight == null)
-            {
-                node = (node.ListChildLeft == null) ? node.ListChildRight : node.ListChildLeft;
-            }
-            else
-            {
-                var mostLeftChild = MostLeftChild(node.ListChildRight);
-                node.Data = mostLeftChild.Data;
-                node.ListChildRight = Delete(node.ListChildRight, node.Data);
-            }
-        }
-        if (node != null) { node = Rebalance(node); }
-        return node;
-    }
-
-    private AdpNode Rebalance(AdpNode node)
-    {
-        UpdateHeight(node);
-        int balance = GetBalance(node);
-        if (balance > 1) {
-            if (Height(node.ListChildRight.ListChildRight) > Height(node.ListChildRight.ListChildLeft)) {
-                node = RotateLeft(node);
-            } else {
-                node.ListChildRight = RotateRight(node.ListChildRight);
-                node = RotateLeft(node);
-            }
-        } else if (balance < -1) {
-            if (Height(node.ListChildLeft.ListChildLeft) > Height(node.ListChildLeft.ListChildRight)) {
-                node = RotateRight(node);
-            } else {
-                node.ListChildLeft = RotateLeft(node.ListChildLeft);
-                node = RotateRight(node);
-            }
-        }
-        return node;
-    }
-    private AdpNode RotateRight(AdpNode y) {
-        AdpNode x = y.ListChildLeft;
-        AdpNode z = x.ListChildRight;
-        x.ListChildRight = y;
-        y.ListChildLeft = z;
-        UpdateHeight(y);
-        UpdateHeight(x);
-        return x;
-    }
-    private AdpNode RotateLeft(AdpNode y) {
-        AdpNode x = y.ListChildRight;
-        AdpNode z = x.ListChildLeft;
-        x.ListChildLeft = y;
-        y.ListChildRight = z;
-        UpdateHeight(y);
-        UpdateHeight(x);
-        return x;
-    }
-    private AdpNode MostLeftChild(AdpNode node)
-    {
-        AdpNode current = node;
-        while (current.ListChildLeft != null) {
-            current = current.ListChildLeft;
-        }
-        return current;
-    }
+    // public void Delete(int data)
+    // {
+    //     _root = Delete(_root, data);
+    // }
+    //
+    // public AdpNode Delete(AdpNode? node, int data)
+    // {
+    //     // Base case
+    //     if (node == null) return node;
+    //     else if (node.Data > data)
+    //     {
+    //         node.Left = Delete(node.Left, data);
+    //     }
+    //     else if (node.Data < data)
+    //     {
+    //         node.Right = Delete(node.Right, data);
+    //     }
+    //     else
+    //     {
+    //         if (node.Left == null || node.Right == null)
+    //         {
+    //             node = (node.Left == null) ? node.Right : node.Left;
+    //         }
+    //         else
+    //         {
+    //             var mostLeftChild = MostLeftChild(node.Right);
+    //             node.Data = mostLeftChild.Data;
+    //             node.Right = Delete(node.Right, node.Data);
+    //         }
+    //     }
+    //     if (node != null) { node = Rebalance(node); }
+    //     return node;
+    // }
+    //
+    // private AdpNode MostLeftChild(AdpNode node)
+    // {
+    //     AdpNode current = node;
+    //     while (current.Left != null) {
+    //         current = current.Left;
+    //     }
+    //     return current;
+    // }
     
-    
-    public int Height()
-    {
-        return _root == null ? -1 : _root.ListHeight;
-    }
-
-    public int Height(AdpNode node)
-    {
-        return node == null ? -1 : node.ListHeight;
-    }
-
-    private void UpdateHeight(AdpNode node)
-    {
-        node.ListHeight = 1 + Math.Max(Height(node.ListChildLeft), Height(node.ListChildRight));
-    }
-    public int GetBalance(AdpNode node)
-    {
-        if (node == null) return 0;
-        return Height(node.ListChildLeft) - Height(node.ListChildRight);
-    }
-
     public int GetSize()
     {
-        return GetSizeRecursive(_root);
+        return GetSizeRecursive(ListRoot);
     }
-    private int GetSizeRecursive(AdpNode node)
+    private int GetSizeRecursive(AdpNode? node)
     {
         if (node == null)
         {
             return 0;
         }
 
-        var size = GetSizeRecursive(node.ListChildLeft) + 1 + GetSizeRecursive(node.ListChildRight);
+        var size = GetSizeRecursive(node.Left) + 1 + GetSizeRecursive(node.Right);
         return size;
     }
-
-    public AdpNode ListRoot
-    {
-        get => _root;
-        set => _root = value ?? throw new ArgumentNullException(nameof(value));
-    }
+    
 }

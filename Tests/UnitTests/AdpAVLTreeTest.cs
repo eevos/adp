@@ -10,15 +10,17 @@ namespace Tests.UnitTests;
 public class AdpAVLTreeTest
 {
     [Theory]
-    [InlineData(1, 2)]
-    // [InlineData(1, 2, 3)] // rebalance
-    // [InlineData(1, 2, 3, 5, 9, 7, -2)]
-    // [InlineData(1, 2, 3, 5, 9, 7, -2)]
+    [InlineData(1, 2)]  // return -1
+    [InlineData(2, 1)]  // return 1
+    [InlineData(1, 2, 3)]  // rebalance -- FAILS with exception
+    [InlineData(2, 3, 1)]  // return 0
+    [InlineData(2, 3, 1, 0)]  // return 0
+    [InlineData(2, 3, 1, 0, -1)]  // rebalance -- FAILS with exception
     public void InsertMultipleNodes_ShouldReturnBalancedTree<T>(params int[] values)
     {
         var sut = InsertTestNodes(values);
-
-        Assert.NotInRange(sut.GetBalance(sut.ListRoot),-2,2);
+        sut.GetBalance(sut.ListRoot);
+        Assert.InRange(sut.GetBalance(sut.ListRoot),-2,2);
     }
     [Theory]
     [InlineData(1,2,3)] // place left & right
@@ -26,7 +28,7 @@ public class AdpAVLTreeTest
     {
         var expected = new List<int>(values);
         var tree = InsertTestNodes(values);
-        var dataRightChild = tree.ListRoot.ListChildRight.ListChildRight.Data;
+        var dataRightChild = tree.ListRoot.Right.Right.Data;
         
         Assert.Equal(expected[2], dataRightChild);
     }
@@ -107,16 +109,16 @@ public class AdpAVLTreeTest
     //         
     // }
     
-    [Theory]
-    [InlineData(new[] {1, 2, 3}, 3)]    // no rebalance
-    // [InlineData(new[] {1, 2, 3, -1}, )] // rebalance
-    public void DeleteNode_FindShouldReturnNull<T>(int[] values, int deleteValue)
-    {
-        var sut = InsertTestNodes(values);
-        sut.Delete(deleteValue);
-        
-        Assert.Null(sut.Find(deleteValue));
-    }
+    // [Theory]
+    // [InlineData(new[] {1, 2, 3}, 3)]    // no rebalance
+    // // [InlineData(new[] {1, 2, 3, -1}, )] // rebalance
+    // public void DeleteNode_FindShouldReturnNull<T>(int[] values, int deleteValue)
+    // {
+    //     var sut = InsertTestNodes(values);
+    //     sut.Delete(deleteValue);
+    //     
+    //     Assert.Null(sut.Find(deleteValue));
+    // }
     
     
     public AdpTree InsertTestNodes(int[] data)
