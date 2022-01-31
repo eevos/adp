@@ -10,8 +10,18 @@ namespace Tests.UnitTests;
 public class AdpAVLTreeTest
 {
     [Theory]
-    [InlineData(1,2,3)]
-    [InlineData(1, 2, 3, 5, 9, 7, -2)]
+    [InlineData(1, 2)]
+    // [InlineData(1, 2, 3)] // rebalance
+    // [InlineData(1, 2, 3, 5, 9, 7, -2)]
+    // [InlineData(1, 2, 3, 5, 9, 7, -2)]
+    public void InsertMultipleNodes_ShouldReturnBalancedTree<T>(params int[] values)
+    {
+        var sut = InsertTestNodes(values);
+
+        Assert.NotInRange(sut.GetBalance(sut.ListRoot),-2,2);
+    }
+    [Theory]
+    [InlineData(1,2,3)] // place left & right
     public void InsertMultipleNodes_ShouldReturnValueOfRightChild<T>(params int[] values)
     {
         var expected = new List<int>(values);
@@ -90,20 +100,20 @@ public class AdpAVLTreeTest
         
         Assert.Equal(expected, sut.Height());
     }
-    [Theory]
-    [InlineData(1, 2, 3)]
-    public void GetBalance_ShouldReturn_Int<T>(params int[] values)
-    {
-            
-    }
+    // [Theory]
+    // [InlineData(1, 2, 3)]
+    // public void GetBalance_ShouldReturn_Int<T>(params int[] values)
+    // {
+    //         
+    // }
     
     [Theory]
-    [InlineData(new[] {1, 2, 3}, 3)]
-    public void DeleteNode_FindShouldNotReturnNode<T>(int[] values, int deleteValue)
+    [InlineData(new[] {1, 2, 3}, 3)]    // no rebalance
+    // [InlineData(new[] {1, 2, 3, -1}, )] // rebalance
+    public void DeleteNode_FindShouldReturnNull<T>(int[] values, int deleteValue)
     {
-        var expected = deleteValue;
         var sut = InsertTestNodes(values);
-        // sut.delete(deleteValue);
+        sut.Delete(deleteValue);
         
         Assert.Null(sut.Find(deleteValue));
     }
