@@ -4,27 +4,27 @@ namespace Algorithms.Algorithms;
 
 public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
 {
-    private LinkedList<T> items;
+    private LinkedList<T> _items;
 
     public AdpDoublyLinkedList()
     {
-        this.items = new();
+        this._items = new();
     }
 
     public AdpDoublyLinkedList(T[] inputItems)
     {
-        this.items = new LinkedList<T>(inputItems);
+        this._items = new LinkedList<T>(inputItems);
     }
 
     public int Count()
     {
-        if (items.Count == 0)
+        if (_items.Count == 0)
         {
             return 0;
         }
 
         var teller = 0;
-        var node = items.First;
+        var node = _items.First;
         teller++;
         while (node.Next != null)
         {
@@ -37,21 +37,21 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
 
     public void Clear()
     {
-        while (items.First != null)
+        while (_items.First != null)
         {
-            items.RemoveFirst();
+            _items.RemoveFirst();
         }
     }
 
     public bool Contains(T item)
     {
-        return items.Contains(item);
+        return _items.Contains(item);
     }
 
     public void Push(T itemToAdd)
     {
         var node = new LinkedListNode<T>(itemToAdd);
-        items.AddFirst(node);
+        _items.AddFirst(node);
     }
     // public void Push(int itemToAdd)
     // {
@@ -63,17 +63,17 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
         for (var i = 0; i < itemsToAdd.Length; i++)
         {
             var node = new LinkedListNode<T>(itemsToAdd[i]);
-            this.items.AddFirst(node);
+            this._items.AddFirst(node);
         }
     }
 
     public T Get(int index)
     {
-        if (items == null)
+        if (_items == null)
         {
             throw new Exception("Array is empty");
         } 
-        var itemsToSearch = items;
+        var itemsToSearch = _items;
         var j = 0;
         while (j < index)
         {
@@ -93,17 +93,17 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
     {
         if (index == 0)
         {
-            var firstNode = items.First;
-            items.AddBefore(firstNode, item);
+            var firstNode = _items.First;
+            _items.AddBefore(firstNode, item);
         }
         else
         {
-            var node = items.First;
+            var node = _items.First;
             for (int i = 0; i < index + 1; i++)
             {
                 if (i == index)
                 {
-                    items.AddAfter(node.Previous, item);
+                    _items.AddAfter(node.Previous, item);
                 }
 
                 node = node.Next;

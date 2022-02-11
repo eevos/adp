@@ -13,6 +13,6 @@ public class AdpBinarySearchStrategyTest
         var item = 1; 
         var expected = values.Length; 
         var sut = new BinarySearchStrategy<int>();
-        Assert.Equal(expected, sut.search(values, item));
+        Assert.Equal(expected, sut.Search(values, item));
     }
 }

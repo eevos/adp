@@ -5,88 +5,88 @@ namespace Algorithms;
 
 public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
 {
-    T[] items;
+    T[] _items;
 
     public int Count()
     {
-        return items.Length;
+        return _items.Length;
     }
 
     public AdpDynamicArrayStepSize1()
     {
-        items = Array.Empty<T>();
+        _items = Array.Empty<T>();
     }
 
     public AdpDynamicArrayStepSize1(int capacity)
     {
-        items = new T[capacity];
+        _items = new T[capacity];
         var test = new List<int>();
     }
     
     public AdpDynamicArrayStepSize1(IEnumerable<T> collection)
     {
-        items = collection.ToArray();
+        _items = collection.ToArray();
     }
 
     public void Add(T item)
     {
-        var newItems = new T[items.Length + 1];
-        for (var i = 0; i < items.Length; i++)
+        var newItems = new T[_items.Length + 1];
+        for (var i = 0; i < _items.Length; i++)
         {
-            newItems[i] = items[i];
+            newItems[i] = _items[i];
         }
 
         newItems[^1] = item;
-        items = newItems;
+        _items = newItems;
     }
     
     public void Add(T[] collection)
     {
-        var newItems = new T[items.Length + collection.Length];
-        for (var i = 0; i < items.Length; i++)
+        var newItems = new T[_items.Length + collection.Length];
+        for (var i = 0; i < _items.Length; i++)
         {
-            newItems[i] = items[i];
+            newItems[i] = _items[i];
         }
         
         for (var i = 0; i < collection.Length; i++)
         {
-            newItems[i + items.Length] = collection[i];
+            newItems[i + _items.Length] = collection[i];
         }
 
-        items = newItems;
+        _items = newItems;
     }
 
     public T Pop()
     {
-        var item = items[^1];
-        var newItems = new T[items.Length - 1];
+        var item = _items[^1];
+        var newItems = new T[_items.Length - 1];
         for (var i = 0; i < newItems.Length; i++)
         {
-            newItems[i] = items[i];
+            newItems[i] = _items[i];
         }
 
-        items = newItems;
+        _items = newItems;
         return item;
     }
 
     public void Clear()
     {
-        items = Array.Empty<T>();
+        _items = Array.Empty<T>();
     }
 
     public bool Contains(T item)
     {
-        return items.Contains(item);
+        return _items.Contains(item);
     }
 
     public int IndexOf(T item)
     {
-        return Array.IndexOf(items, item);
+        return Array.IndexOf(_items, item);
     }
 
     public void Insert(int index, T item)
     {
-        var newItems = new T[items.Length + 1];
+        var newItems = new T[_items.Length + 1];
 
         var j = 0;
         for (var i = 0; i < newItems.Length; i++)
@@ -97,11 +97,11 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
                 continue;
             }
 
-            newItems[i] = items[j];
+            newItems[i] = _items[j];
             j++;
         }
 
-        items = newItems;
+        _items = newItems;
     }
 
     public bool Remove(T item)
@@ -117,35 +117,35 @@ public class AdpDynamicArrayStepSize1<T> : IAdpDynamicArray<T>
 
     public bool RemoveAt(int index)
     {
-        var newItems = new T[items.Length - 1];
+        var newItems = new T[_items.Length - 1];
 
         var j = 0;
-        for (var i = 0; i < items.Length; i++)
+        for (var i = 0; i < _items.Length; i++)
         {
             if (i == index) continue;
 
-            newItems[j] = items[i];
+            newItems[j] = _items[i];
             j++;
         }
 
-        items = newItems;
+        _items = newItems;
         return true;
     }
 
     public T[] ToArray()
     {
-        return items;
+        return _items;
     }
 
     public T this[int index]
     {
-        get => items[index];
-        set => items[index] = value;
+        get => _items[index];
+        set => _items[index] = value;
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        return ((IEnumerable<T>)items).GetEnumerator();
+        return ((IEnumerable<T>)_items).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()

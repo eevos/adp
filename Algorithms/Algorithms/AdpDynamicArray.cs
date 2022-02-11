@@ -5,80 +5,80 @@ namespace Algorithms;
 
 public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 {
-    T?[] items;
-    int size;
+    T?[] _items;
+    int _size;
 
-    public int Capacity
+    public int ListCapacity
     {
-        get { return items.Length; }
+        get { return _items.Length; }
     }
 
     public int Count()
     {
-        return size;
+        return _size;
     }
 
     public AdpDynamicArray()
     {
-        items = Array.Empty<T>();
-        size = 0;
+        _items = Array.Empty<T>();
+        _size = 0;
     }
 
     public AdpDynamicArray(int capacity)
     {
-        items = new T[capacity];
-        size = capacity;
+        _items = new T[capacity];
+        _size = capacity;
     }
 
     public AdpDynamicArray(IEnumerable<T> collection)
     {
-        items = collection.ToArray();
-        size = items.Length;
+        _items = collection.ToArray();
+        _size = _items.Length;
     }
     
     public void Add(T item)
     {
-        Grow(size + 1);
-        items[size] = item;
-        size++;
+        Grow(_size + 1);
+        _items[_size] = item;
+        _size++;
     }
     
     public void Add(T[] collection)
     {
-        Grow(size + collection.Length);
-        Array.Copy(collection, 0, items, size, collection.Length);
-        size += collection.Length;
+        Grow(_size + collection.Length);
+        Array.Copy(collection, 0, _items, _size, collection.Length);
+        _size += collection.Length;
     }
 
     public T Pop()
     {
-        var item = items[size - 1];
-        RemoveAt(size - 1);
+        var item = _items[_size - 1];
+        RemoveAt(_size - 1);
         return item;
     }
 
     public void Clear()
     {
-        items = Array.Empty<T>();
-        size = 0;
+        _items = Array.Empty<T>();
+        _size = 0;
     }
 
     public bool Contains(T item)
     {
-        return items.Contains(item);
+        return _items.Contains(item);
     }
 
     public int IndexOf(T item)
     {
-        return Array.IndexOf(items, item);
+        return Array.IndexOf(_items, item);
     }
 
     public void Insert(int index, T item)
     {
-        Grow(size + 1);
-        Array.Copy(items, index, items, index + 1, size - index);
-        items[index] = item;
-        size++;
+        Grow(_size + 1);
+        Array.Copy(_items, index, _items, index + 1, _size - index);
+        _items[index] = item;
+        _size++;
     }
 
     public bool Remove(T item)
@@ -94,18 +94,18 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 
     public bool RemoveAt(int index)
     {
-        Shrink(size - 1);
-        Array.Copy(items, index + 1, items, index, size - index - 1);
-        size--;
+        Shrink(_size - 1);
+        Array.Copy(_items, index + 1, _items, index, _size - index - 1);
+        _size--;
         return true;
     }
 
     public T[] ToArray()
     {
-        var newItems = new T[size];
-        for (var i = 0; i < size; i++)
+        var newItems = new T[_size];
+        for (var i = 0; i < _size; i++)
         {
-            newItems[i] = items[i];
+            newItems[i] = _items[i];
         }
 
         return newItems;
@@ -113,13 +113,13 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
 
     public T? this[int index]
     {
-        get => items[index];
-        set => items[index] = value;
+        get => _items[index];
+        set => _items[index] = value;
     }
 
     public IEnumerator<T> GetEnumerator()
     {
-        return ((IEnumerable<T>)items).GetEnumerator();
+        return ((IEnumerable<T>)_items).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -129,21 +129,21 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
     
     private void Grow(int newSize)
     {
-        if (newSize >= items.Length)
+        if (newSize >= _items.Length)
         {
             var newItems = new T[newSize * 2];
-            Array.Copy(items, newItems, size);
-            items = newItems;
+            Array.Copy(_items, newItems, _size);
+            _items = newItems;
         }
     }
     
     private void Shrink(int newSize)
     {
-        if (newSize < items.Length / 2)
+        if (newSize < _items.Length / 2)
         {
-            var newItems = new T[(int)Math.Ceiling((double)items.Length / 2)];
-            Array.Copy(items, newItems, size);
-            items = newItems;
+            var newItems = new T[(int)Math.Ceiling((double)_items.Length / 2)];
+            Array.Copy(_items, newItems, _size);
+            _items = newItems;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 public class BinarySearchStrategy<T>
 {
-    public int search(T[] array, T item)
+    public int Search(T[] array, T item)
     {
         var result = array.Length;
         return result;

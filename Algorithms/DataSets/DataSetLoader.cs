@@ -8,7 +8,7 @@ namespace Tests.DataSets;
 
 public class DataSetLoader<T> : IEnumerable<object[]>
 {
-    public T DataSet { get; }
+    public T ListDataSet { get; }
 
     public DataSetLoader()
     {
@@ -17,10 +17,14 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         if (projectDirectory == null) throw new Exception("Could not find project directory");
         var dataSetDirectory = Path.Combine(projectDirectory, "Algorithms/DataSets");
         
+        string text;
+        if (typeof(T) == typeof(DsSortDto))
+        { 
+            text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
+        }
+        text = File.ReadAllText(dataSetDirectory + "/dataset_hashing.json");
 
-        var text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
-
-        DataSet = JsonConvert.DeserializeObject<T>(text);
+        ListDataSet = JsonConvert.DeserializeObject<T>(text);
     }
 
     public IEnumerator<object[]> GetEnumerator()
@@ -28,7 +32,7 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         var properties = typeof(T).GetProperties();
         foreach (var property in properties)
         {
-            yield return new [] { property.GetValue(DataSet) };
+            yield return new [] { property.GetValue(ListDataSet) };
         }
     }
 
