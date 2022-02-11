@@ -21,7 +21,7 @@ public class AdpHashTableTest
     [InlineData(2)]
     [InlineData(-2)]
     [InlineData(945457457)]
-    public void Add_CheckIfAddWorks(int value)
+    public void Add_CheckIfAddWorks(params int[] value)
     {
         var hashTable = new AdpHashTable();
         var key = "a";
@@ -41,7 +41,6 @@ public class AdpHashTableTest
         var testIndex = hashTable.CalculateIndexFromKey(key);
         Assert.InRange(testIndex,0,hashTable.ListCapacity);
     }
-    
     
     [Theory]
     [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
