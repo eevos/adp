@@ -46,11 +46,16 @@ public class AdpHashTable
         var node = new LinkedListNode<HashedItem>(hashedItem);
         
         int indexOfLinkedList = CalculateIndexFromKey(key);
-        // if index has no LinkedList:
-        var linkedList = new LinkedList<HashedItem>();
-        // var linkedList = 
-        array[indexOfLinkedList] = linkedList;
-        linkedList.AddFirst(node);
+        // if index has no LinkedList: declare first
+        if (array[indexOfLinkedList] == null)
+        {
+            array[indexOfLinkedList] = new LinkedList<HashedItem>();
+            array[indexOfLinkedList].AddFirst(node);
+        }
+        else
+        {
+            array[indexOfLinkedList].AddFirst(node);
+        }
     }
 
     public int CalculateIndexFromKey(string key)
@@ -64,8 +69,8 @@ public class AdpHashTable
     public int[]? FindValue(string key)
     {
         int[]? returnValue = null;
-        // try
-        // {
+        try
+        {
             int indexOfLinkedList = CalculateIndexFromKey(key);
             var linkedList = array?[indexOfLinkedList];
             for (var node = linkedList.First; node != null; node = node.Next)
@@ -75,10 +80,10 @@ public class AdpHashTable
                     returnValue = node.Value.ListValue;
                 }
             }
-        // } catch (Exception e)
-        // {
-        //     throw new Exception("exception: no key in linkedlist corresponds to requested key");
-        // }
+        } catch (Exception e)
+        {
+            throw new Exception("exception: no key in linkedlist corresponds to requested key");
+        }
         return returnValue;
     }
 }

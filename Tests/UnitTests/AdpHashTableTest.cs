@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Implementations.DataSets;
-using Algorithms;
 using Algorithms.Algorithms;
 using Tests.DataSets;
 using Xunit;
@@ -13,64 +12,52 @@ public class AdpHashTableTest
 {
     [Theory]
     [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
-    public void Add_CheckIfMultipleAdded_FindValueReturnsCorrectValue(Dictionary<string, int[]> values)
+    public void Add_CheckIfMultipleAdded_FindReturnsValues(Dictionary<string, int[]> values)
     {
-    }
+        var hashTable = new AdpHashTable();
+        
+        hashTable.Add(values);
 
+        foreach (var (key, value) in values)
+        {
+            Assert.Equal(value, hashTable.FindValue(key));
+        }
+    } 
     [Theory]
     [InlineData(2)]
     [InlineData(-2)]
     [InlineData(945457457)]
-    public void Add_CheckIfAddWorks(params int[] value)
+    public void Add_CheckIfAddedString_FindReturnsString(params int[] value)
     {
         var hashTable = new AdpHashTable();
-        var key = "a";
+        var key = "ieniemienie";
         
         hashTable.Add(key, value);
         var foundValue = hashTable.FindValue(key);
         
         Assert.Equal(value, foundValue);
     }
-
+    [Theory]
+    [InlineData(2)]
+    public void Add_CheckIfAddedString_FindReturnsException(params int[] value)
+    {
+        var hashTable = new AdpHashTable();
+        var keyToAdd = "ieniemienie";
+        
+        hashTable.Add(keyToAdd, value);
+        
+        Assert.Throws<Exception>(() => hashTable.FindValue("oeniemoenie"));
+    }
     [Theory]
     [InlineData("barbabababapapabarba")]
     [InlineData("ieniemienie")]
     public void CalculateIndexFromKey_CheckIfWorks(string key)
     {
         var hashTable = new AdpHashTable();
+        
         var testIndex = hashTable.CalculateIndexFromKey(key);
+        
         Assert.InRange(testIndex,0,hashTable.ListCapacity);
     }
     
-    [Theory]
-    [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
-    public void Add_CheckIfAdded_FindValueReturnsCorrectValue(Dictionary<string, int[]> values)
-    {
-        var hashTable = new AdpHashTable();
-        hashTable.Add(values);
-        // foreach (var (key, value) in values)
-        // {
-        //     hashTable.Add(key,value);
-        // }
-        foreach (var (key, value) in values)
-        {
-            //     Assert.Equal(value, hashTable[key]);
-        Assert.Equal(value, hashTable.FindValue(key));
-        }
-    } 
-    // [Theory]
-    // [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
-    // public void AddDictionary_CheckIfAdded_FindValueReturnsCorrectValue(Dictionary<string, int[]> values)
-    // {
-    //     var hashTable = new AdpHashTable();
-    //     foreach (var (key, value) in values)
-    //     {
-    //         hashTable.Add(key,value);
-    //     }
-    //     foreach (var (key, value) in values)
-    //     {
-    //         //     Assert.Equal(value, hashTable[key]);
-    //     Assert.Equal(value, hashTable.FindValue(key));
-    //     }
-    // }
 }
