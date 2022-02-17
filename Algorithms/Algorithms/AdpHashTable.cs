@@ -6,18 +6,20 @@ public class AdpHashTable
 {
     private LinkedList<HashedItem>[]? array;
     public int ListCapacity { get; set; }
-    private double _loadFactor = 0.7;
+    private double _loadFactor = 0.70;
+    private Dictionary<string, int[]> _dictionary;
 
-    // public AdpHashTable(int capacity)
-    // {
-    //     ListCapacity = capacity;
-    //     // _arrayOfLinkedLists_WithHashedItems = new HashedItem[capacity];
-    //     _arrayOfLinkedLists_WithHashedItems = new LinkedList<HashedItem>[capacity];
-    // }
+    public AdpHashTable(int capacity)
+    {
+        ListCapacity = capacity;
+        array = new LinkedList<HashedItem>[capacity];
+        _dictionary = new Dictionary<string, int[]>();
+    }
     public AdpHashTable()
     {
-        ListCapacity = 30;
+        ListCapacity = 10;
         array = new LinkedList<HashedItem>[ListCapacity];
+        _dictionary = new Dictionary<string, int[]>();
     }
 
     private class HashedItem
@@ -34,14 +36,38 @@ public class AdpHashTable
 
     public void Add(Dictionary<string, int[]> dictionary)
     {
+        _dictionary = dictionary;
         foreach (var (key, arrayValues) in dictionary)
         {
             Add(key, arrayValues);
         }
     }
 
+    private bool HashTableExceedsLoadFactor()
+    {
+        var filledSpotsInArray = 0;
+        foreach (var spot in array)
+        {
+            if (spot.First != null)
+            {
+                filledSpotsInArray++;
+            }
+        }
+        if ((filledSpotsInArray / (double) array.Length) > _loadFactor)
+        {
+            return true;
+        }
+        return false;
+    }
     public void Add(string key, int[] arrayValues)
     {
+        if (HashTableExceedsLoadFactor())
+        {
+            ListCapacity = ListCapacity * 2;
+            Add(_dictionary);
+            return;
+        }
+
         var hashedItem = new HashedItem(key, arrayValues);
         var node = new LinkedListNode<HashedItem>(hashedItem);
         
@@ -58,6 +84,10 @@ public class AdpHashTable
         }
     }
 
+    public void Add(Hashtable hashtable)
+    {
+        
+    }
     public int CalculateIndexFromKey(string key)
     {
         var positiveHash = key.GetHashCode() & 0xfffffff;
