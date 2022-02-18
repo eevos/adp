@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace Algorithms.Algorithms;
+﻿namespace Algorithms.Algorithms;
 
 public class AdpHashTable
 {
