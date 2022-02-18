@@ -2,13 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Implementations.DataSets;
 using Newtonsoft.Json;
 
 namespace Tests.DataSets;
 
 public class DataSetLoader<T> : IEnumerable<object[]>
 {
-    public T ListDataSet { get; }
+    public T? ListDataSet { get; }
 
     public DataSetLoader()
     {
@@ -16,14 +17,23 @@ public class DataSetLoader<T> : IEnumerable<object[]>
         var projectDirectory = Directory.GetParent(workingDirectory)?.Parent?.Parent?.Parent?.FullName;
         if (projectDirectory == null) throw new Exception("Could not find project directory");
         var dataSetDirectory = Path.Combine(projectDirectory, "Algorithms/DataSets");
-        
+
         string text;
         if (typeof(T) == typeof(DsSortDto))
-        { 
+        {
             text = File.ReadAllText(dataSetDirectory + "/dataset_sorteren.json");
         }
-        text = File.ReadAllText(dataSetDirectory + "/dataset_hashing.json");
-
+        else if (typeof(T) == typeof(DsHashTableDto))
+        {
+            text = File.ReadAllText(dataSetDirectory + "/dataset_hashing.json");
+        } 
+        else
+    // } else if (typeof(T) == typeof(DsGraphMatrixDto) 
+    // || typeof(T) == typeof(DsGraphLineDto) 
+    // || typeof(T) == typeof(DsGraphListDto))
+        {
+            text = File.ReadAllText(dataSetDirectory + "/dataset_grafen.json");
+        }
         ListDataSet = JsonConvert.DeserializeObject<T>(text);
     }
 
