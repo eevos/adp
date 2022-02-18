@@ -72,7 +72,7 @@ public class AdpHashTableTest
         
         hashTable.Add(keyToAdd, value);
         
-        Assert.Throws<Exception>(() => hashTable.FindValue("oeniemoenie"));
+        Assert.Throws<Exception>(() => hashTable.FindValue("oeniemoeniepppp"));
     }
     [Theory]
     [InlineData("barbabababapapabarba")]
