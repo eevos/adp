@@ -12,6 +12,32 @@ public class AdpHashTableTest
 {
     [Theory]
     [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
+    public void Clear_CheckIfMultipleAdded_FindReturnsNull(Dictionary<string, int[]> values)
+    {
+        var hashTable = new AdpHashTable();
+        
+        hashTable.Add(values);
+        hashTable.Clear();
+        
+        foreach (var (key, value) in values)
+        {
+            Assert.Throws<Exception>(() => hashTable.FindValue(key));
+        }
+    } 
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
+    public void HashTableExceedsLoadFactor_CheckIfHashTableGrows(Dictionary<string, int[]> values)
+    {        
+        var initialLength = 2;
+        var hashTable = new AdpHashTable(initialLength);
+
+        hashTable.Add(values);
+        
+        Assert.NotInRange(hashTable.ListCapacity,2,2);
+        
+    }
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
     public void Add_CheckIfMultipleAdded_FindReturnsValues(Dictionary<string, int[]> values)
     {
         var hashTable = new AdpHashTable();
