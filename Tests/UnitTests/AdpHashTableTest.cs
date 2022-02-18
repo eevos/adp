@@ -85,5 +85,21 @@ public class AdpHashTableTest
         
         Assert.InRange(testIndex,0,hashTable.ListCapacity);
     }
-    
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsHashTableDto>))]
+    public void MeasureLoadFactor_CheckIfWorks(Dictionary<string, int[]> values)
+    {
+        var loadFactor = 0.70;
+        var load = values.Count;
+        int capacity = (int)Math.Ceiling(load * loadFactor) + 1;
+        
+        var hashTable = new AdpHashTable(capacity);
+        hashTable.Add(values);
+
+        for (int i = 0; i < 10; i++)
+        {
+            var measuredLoadFactor = hashTable.MeasureLoadFactor();
+            Assert.InRange(measuredLoadFactor, 0, loadFactor);
+        }
+    }
 }

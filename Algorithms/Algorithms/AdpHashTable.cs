@@ -82,7 +82,7 @@ public class AdpHashTable
         }
     }
 
-    private double MeasureLoadFactor()
+    public double MeasureLoadFactor()
     {
         return _filledSpotsInArray / (double) array.Length;
     }
