@@ -4,6 +4,6 @@ namespace Implementations.DataSets;
 
 public class DsGraphListDto
 {
-    [JsonProperty("verbindingslijst")] public object[][][]? AdjacencyList { get; set; }
-    [JsonProperty("verbindingslijst_gewogen")] public object[][][]? WeightAdjacencyList { get; set; }
+    [JsonProperty("verbindingslijst")] public int[][][]? AdjacencyList { get; set; }
+    [JsonProperty("verbindingslijst_gewogen")] public int[][][]? WeightAdjacencyList { get; set; }
 }
