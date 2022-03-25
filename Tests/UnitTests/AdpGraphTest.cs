@@ -49,6 +49,27 @@ public class AdpGraphTest
         Assert.Equal(41,weight);
     }
     [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
+    public void GraphLine_GetAdjacentVertices_ReturnsList(int[][] values)
+    {
+        var matrix = new AdpGraph(values, false);
+        for (var i = 0; i < matrix.ListNumVertices; i++)
+        {
+            var adjacentVertices = matrix.GetAdjacentVertices(i);
+            var anyAboveZero = adjacentVertices.Count(x => x > 0);
+            if (matrix.GetAllWeights().Sum() > matrix.ListNumVertices)
+            {
+                // except for some vertices in a weighted matrix 
+                Assert.InRange(anyAboveZero, 0, matrix.ListNumVertices);
+            }
+            else
+            {
+                // We know that any vertex has at least 1 adjacent vertex 
+                Assert.InRange(anyAboveZero, 1, matrix.ListNumVertices);
+            }
+        }
+    }    
+    [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
     public void GraphList_GetAdjacentVertices_ReturnsList(int[][][] values)
     {

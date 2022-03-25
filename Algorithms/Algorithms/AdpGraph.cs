@@ -27,14 +27,13 @@ public class AdpGraph
             var weight = 1;
             var v1 = values[i][0];
             var v2 = values[i][1];
-            if (values[i].Length > 1)
+            if (values[i].Length > 2)
             {
                 weight = values[i][2];
             }
             AddEdge(v1, v2, weight);
         }
     }
-    
     public AdpGraph(int[][][] values, bool directed = false)
     {
         ListNumVertices = values.Length;
@@ -76,58 +75,49 @@ public class AdpGraph
         }
         return adjacentVertices;
     }
-
-    // public IEnumerable<int> GetAdjacentVertices(int v)
+    // public void printAllPaths(int s, int d)
     // {
+    //     bool[] isVisited = new bool[ListNumVertices];
+    //     List<int> pathList = new List<int>();
+    //
+    //     pathList.Add(s);
+    //
+    //     printAllPathsUtil(s, d, isVisited, pathList);
     // }
 
-    // public int GetEdgeWeight(int v1, int v2)
+    // private void printAllPathsUtil(int u, int d, bool[] isVisited, List<int> localPathList)
     // {
+    //     if (u.Equals(d))
+    //     {
+    //         Console.WriteLine(string.Join(" ", localPathList));
+    //         // if match found then no need
+    //         // to traverse more till depth
+    //         return;
+    //     }
+    //
+    //     // Mark the current node
+    //     isVisited[u] = true;
+    //     // Recur for all the vertices adjacent to current vertex
+    //     for (var i = 0; i < ListNumVertices; i++)
+    //     {
+    //         for (var j = 0; j < ListNumVertices; j++)
+    //         {
+    //             if (!isVisited[i])
+    //             {
+    //                 // store current node in path[]
+    //                 localPathList.Add(i);
+    //                 printAllPathsUtil(i, d, isVisited,
+    //                     localPathList);
+    //
+    //                 // remove current node in path[]
+    //                 localPathList.Remove(i);
+    //             }
+    //         }
+    //     }
+    //
+    //     // Mark the current node
+    //     isVisited[u] = false;
     // }
-
-    public void printAllPaths(int s, int d)
-    {
-        bool[] isVisited = new bool[ListNumVertices];
-        List<int> pathList = new List<int>();
-
-        pathList.Add(s);
-
-        printAllPathsUtil(s, d, isVisited, pathList);
-    }
-
-    private void printAllPathsUtil(int u, int d, bool[] isVisited, List<int> localPathList)
-    {
-        if (u.Equals(d))
-        {
-            Console.WriteLine(string.Join(" ", localPathList));
-            // if match found then no need
-            // to traverse more till depth
-            return;
-        }
-
-        // Mark the current node
-        isVisited[u] = true;
-        // Recur for all the vertices adjacent to current vertex
-        for (var i = 0; i < ListNumVertices; i++)
-        {
-            for (var j = 0; j < ListNumVertices; j++)
-            {
-                if (!isVisited[i])
-                {
-                    // store current node in path[]
-                    localPathList.Add(i);
-                    printAllPathsUtil(i, d, isVisited,
-                        localPathList);
-
-                    // remove current node in path[]
-                    localPathList.Remove(i);
-                }
-            }
-        }
-
-        // Mark the current node
-        isVisited[u] = false;
-    }
 
     public IEnumerable<int> GetAllWeights()
     {
