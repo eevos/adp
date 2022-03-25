@@ -11,11 +11,21 @@ namespace Tests.UnitTests;
 
 public class AdpGraphTest
 {
+    
+   [Theory]
+     [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
+    public void Constructor_WorksOnLineList(int[][][] values)
+    {
+        var matrix = new AdpGraph(values, true);
+
+        Assert.NotNull(matrix);
+    }    
+    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
     public void Constructor_WorksOnList(int[][][] values)
     {
-        var matrix = new AdpGraph(values, false);
+        var matrix = new AdpGraph(values, true);
 
         Assert.NotNull(matrix);
     }
@@ -39,10 +49,30 @@ public class AdpGraphTest
         var weight = graph.GetWeight(0, 1);
         Assert.Equal(41,weight);
     }
-    
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
+    public void GraphList_GetAdjacentVertices_ReturnsList(int[][][] values)
+    {
+        var matrix = new AdpGraph(values, false);
+        for (var i = 0; i < matrix.NumVertices; i++)
+        {
+            var adjacentVertices = matrix.GetAdjacentVerticesInMatrix(i);
+            var anyAboveZero = adjacentVertices.Count(x => x > 0);
+            if (matrix.GetAllWeights().Sum() > matrix.NumVertices)
+            {
+                // except for some vertices in a weighted matrix 
+                Assert.InRange(anyAboveZero, 0, matrix.NumVertices);
+            }
+            else
+            {
+                // We know that any vertex has at least 1 adjacent vertex 
+                Assert.InRange(anyAboveZero, 1, matrix.NumVertices);
+            }
+        }
+    }
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
-    public void GetAdjacentVertices_ReturnsList(int[,] values)
+    public void GraphMatrix_GetAdjacentVertices_ReturnsList(int[,] values)
     {
         var matrix = new AdpGraph(values, false);
         for (var i = 0; i < matrix.NumVertices; i++)

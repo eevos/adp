@@ -23,31 +23,24 @@ public class AdpGraph
         _directed = directed;
         Matrix = new int[values.Length, values.Length];
         
-        // if verbindingslijst gewogen = directed
         for (var i = 0; i < NumVertices; i++)
         {
             for (var j = 0; j < values[i].Length; j++)
             {
                 var v1 = i;                 // this is v1: [i]
                 var v2 = values[i][j][0];   // this is v1: [i] [j][0]
-                Matrix[v1, v2] = values[i][j][1]; // this is an edge: [i] [j][1]
-            }
-        }
-    }    
-    public AdpGraph(int[][] values, bool directed = false)
-    {
-        NumVertices = values.Length;
-        _directed = directed;
-        Matrix = new int[values.Length, values.Length];
-        
-        // if verbindingslijst gewogen = directed
-        for (var i = 0; i < NumVertices; i++)
-        {
-            for (var j = 0; j < values[i].Length; j++)
-            {
-                var v1 = i;              // this is v1: [i]
-                var v2 = values[i][j];   // this is v1: [i] [j]
-                Matrix[v1, v2] = 1;         // this is an edge: 1
+                if (values[i][j].Length > 1)
+                {
+                    Matrix[v1, v2] = values[i][j][1]; // this is an edge: [i] [j][1]
+                }
+                else
+                {
+                    Matrix[v1, v2] = 1; // this is an edge: [i] [j]
+                    if (!_directed)
+                    {
+                        Matrix[v2, v1] = 1; 
+                    }
+                }
             }
         }
     }
