@@ -5,73 +5,75 @@ namespace Algorithms.Algorithms;
 
 public class AdpGraph
 {
-    public int NumVertices { get; }
+    public int ListNumVertices { get; }
     private readonly bool _directed;
-    int[,] Matrix;
-    int[][][] List;
+    private readonly int[,] _matrix;
 
     public AdpGraph(int[,] matrix, bool directed = false)
     {
-        NumVertices = matrix.GetLength(0);
+        ListNumVertices = matrix.GetLength(0);
         _directed = directed;
-        Matrix = matrix;
+        _matrix = matrix;
     }
 
+    public AdpGraph(int[][] values, bool directed = false)
+    {      
+        ListNumVertices = values.Length;
+        _directed = directed;
+        _matrix = new int[values.Length, values.Length];
+
+        for (var i = 0; i < ListNumVertices; i++)
+        {
+            var weight = 1;
+            var v1 = values[i][0];
+            var v2 = values[i][1];
+            if (values[i].Length > 1)
+            {
+                weight = values[i][2];
+            }
+            AddEdge(v1, v2, weight);
+        }
+    }
+    
     public AdpGraph(int[][][] values, bool directed = false)
     {
-        NumVertices = values.Length;
+        ListNumVertices = values.Length;
         _directed = directed;
-        Matrix = new int[values.Length, values.Length];
+        _matrix = new int[values.Length, values.Length];
         
-        for (var i = 0; i < NumVertices; i++)
+        for (var i = 0; i < ListNumVertices; i++)
         {
             for (var j = 0; j < values[i].Length; j++)
             {
                 var v1 = i;                 // this is v1: [i]
                 var v2 = values[i][j][0];   // this is v1: [i] [j][0]
+                var weight = 1;
                 if (values[i][j].Length > 1)
                 {
-                    Matrix[v1, v2] = values[i][j][1]; // this is an edge: [i] [j][1]
+                    weight = values[i][j][1]; // this is an edge: [i] [j][1]
                 }
-                else
-                {
-                    Matrix[v1, v2] = 1; // this is an edge: [i] [j]
-                    if (!_directed)
-                    {
-                        Matrix[v2, v1] = 1; 
-                    }
-                }
+                AddEdge(v1, v2, weight); 
             }
         }
     }
 
-    public void ChangeEdge(int v1, int v2, int weight)
+    public void AddEdge(int v1, int v2, int weight)
     {
         if (weight < 1) throw new ArgumentException("Weight of an Edge cannot be less than 1");
-        if (Matrix != null)
-        {
-            Matrix[v1, v2] = weight;
-            if (!_directed) Matrix[v2, v1] = weight;
-        }
-
-        if (List != null)
-        {
-            // if (List[v1][v2])
-            List[v1][v2][1] = weight;
-        }
+        _matrix[v1, v2] = weight;
+        if (!_directed) _matrix[v2, v1] = weight;
     }
 
-    public IEnumerable<int> GetAdjacentVerticesInMatrix(int vertex)
+    public IEnumerable<int> GetAdjacentVertices(int vertex)
     {
         var adjacentVertices = new List<int>();
-        for (int i = 0; i < NumVertices; i++)
+        for (var i = 0; i < ListNumVertices; i++)
         {
-            if (Matrix[vertex, i] > 0)
+            if (_matrix[vertex, i] > 0)
             {
                 adjacentVertices.Add(i);
             }
         }
-
         return adjacentVertices;
     }
 
@@ -85,7 +87,7 @@ public class AdpGraph
 
     public void printAllPaths(int s, int d)
     {
-        bool[] isVisited = new bool[NumVertices];
+        bool[] isVisited = new bool[ListNumVertices];
         List<int> pathList = new List<int>();
 
         pathList.Add(s);
@@ -106,9 +108,9 @@ public class AdpGraph
         // Mark the current node
         isVisited[u] = true;
         // Recur for all the vertices adjacent to current vertex
-        for (var i = 0; i < NumVertices; i++)
+        for (var i = 0; i < ListNumVertices; i++)
         {
-            for (var j = 0; j < NumVertices; j++)
+            for (var j = 0; j < ListNumVertices; j++)
             {
                 if (!isVisited[i])
                 {
@@ -127,32 +129,23 @@ public class AdpGraph
         isVisited[u] = false;
     }
 
-    public int[] GetAllWeights()
+    public IEnumerable<int> GetAllWeights()
     {
-        int[] weights = new int[NumVertices * NumVertices];
-        int k = 0;
-        for (var i = 0; i < NumVertices; i++)
+        var weights = new int[ListNumVertices * ListNumVertices];
+        var k = 0;
+        for (var i = 0; i < ListNumVertices; i++)
         {
-            for (var j = 0; j < NumVertices; j++)
+            for (var j = 0; j < ListNumVertices; j++)
             {
                 weights[k] = GetWeight(i, j);
                 k++;
             }
         }
-
         return weights;
     }
 
     public int GetWeight(int v1, int v2)
     {
-        if (Matrix != null)
-        {
-            return Matrix[v1, v2];
-        }
-
-        // if (List != null)
-        // {
-        return List[v1][v2][1];
-        // }
+        return _matrix[v1, v2]; 
     }
 }
