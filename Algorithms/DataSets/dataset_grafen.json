@@ -42,8 +42,8 @@
     [[2], [3], [5]],
     [[4], [6]],
     [[5]]
-  ],
-  "verbindingslijst_gewogen": 
+  ]
+  , "verbindingslijst_gewogen": 
   [
       [[1, 99], [2, 50]]
     , [[2, 50], [3, 50], [4, 50]]

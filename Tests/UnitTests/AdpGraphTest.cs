@@ -11,6 +11,24 @@ namespace Tests.UnitTests;
 
 public class AdpGraphTest
 {
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
+    public void Constructor_WorksOnList(int[][][] values)
+    {
+        var matrix = new AdpGraph(values, false);
+
+        Assert.NotNull(matrix);
+    }
+    
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
+    public void Constructor_WorksOnMatrix(int[,] values)
+    {
+        var matrix = new AdpGraph(values, false);
+
+        Assert.NotNull(matrix);
+    }
+
     // Add test AddEdge Matrix
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
@@ -71,15 +89,6 @@ public class AdpGraphTest
         var weight = matrix.GetWeight(0, 1);
 
         Assert.InRange(weight, 1, 9999);
-    }
-
-    [Theory]
-    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
-    public void Constructor_Works(int[,] values)
-    {
-        var matrix = new AdpGraph(values, false);
-
-        Assert.NotNull(matrix);
     }
 
     [Theory]
