@@ -2,18 +2,18 @@
 
 namespace Algorithms.Algorithms;
 
-public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
+public class AdpDoublyLinkedList<T>
 {
     private LinkedList<T> _items;
 
     public AdpDoublyLinkedList()
     {
-        this._items = new();
+        _items = new LinkedList<T>();
     }
 
     public AdpDoublyLinkedList(T[] inputItems)
     {
-        this._items = new LinkedList<T>(inputItems);
+        _items = new LinkedList<T>(inputItems);
     }
 
     public int Count()
@@ -48,40 +48,60 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
         return _items.Contains(item);
     }
 
-    public void Push(T itemToAdd)
+    public void AddLeft(T itemToAdd)
+    {
+        Push(itemToAdd, "left");
+    }
+
+    public void AddRight(T itemToAdd)
+    {
+        Push(itemToAdd, "right");
+    }
+
+    private void Push(T itemToAdd, string side)
     {
         var node = new LinkedListNode<T>(itemToAdd);
-        _items.AddFirst(node);
+        if (side is "left" or null)
+        {
+            _items.AddFirst(itemToAdd);
+        }
+        else
+        {
+            _items.AddLast(itemToAdd);
+        }
     }
-    // public void Push(int itemToAdd)
-    // {
-    //     var node = new LinkedListNode<T>(itemToAdd);
-    //     items.AddFirst(node);
-    // }
+
     public void Push(T[] itemsToAdd)
     {
         for (var i = 0; i < itemsToAdd.Length; i++)
         {
-            var node = new LinkedListNode<T>(itemsToAdd[i]);
-            this._items.AddFirst(node);
+            AddLeft(itemsToAdd[i]);
         }
     }
 
     public T Get(int index)
     {
-        if (_items == null)
+        if (_items == null || _items.Count == 0 || _items.First.Value == null)
         {
-            throw new Exception("Array is empty");
-        } 
-        var itemsToSearch = _items;
-        var j = 0;
-        while (j < index)
-        {
-            itemsToSearch.RemoveFirst();
-            j++;
+            throw new Exception("LinkedList is empty");
         }
-        var item = itemsToSearch.First.Value;
-        return item;
+
+        if (index == 0) return _items.First.Value;
+        
+        var node = _items.First;
+        for (int i = 0; i < _items.Count; i++)
+        {
+            var nextNode = node.Next;
+            if (i != index)
+            {
+                node = nextNode;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return node.Value;
     }
 
     public int IndexOf(T item)
@@ -111,19 +131,55 @@ public class AdpDoublyLinkedList<T> : IAdpDoublyLinkedList<T>
         }
     }
 
-    public bool Remove(T item)
+    public void Remove(T item)
     {
-        throw new NotImplementedException();
+        var node = _items.First;
+        ErrorCheck(node);
+
+        var comparer = Comparer<T>.Default;
+        for (int i = 0; i < _items.Count; i++)
+        {
+            var nextNode = node.Next;
+            if (comparer.Compare(node.Value, item) == 0)
+            {
+                _items.Remove(item);
+                node = nextNode;
+            }
+            else
+            {
+                node = nextNode;
+            }
+        }
     }
 
-    public bool RemoveAt(int index)
+
+    public void RemoveAt(int index)
     {
-        throw new NotImplementedException();
+        var node = _items.First;
+        ErrorCheck(node);
+
+        for (int i = 0; i < _items.Count; i++)
+        {
+            var nextNode = node.Next;
+            if (i == index)
+            {
+                _items.Remove(node);
+                return;
+            }
+            node = nextNode;
+        }
     }
 
-    public T this[int index]
+    private void ErrorCheck(LinkedListNode<T> node)
     {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
+        if (_items.First == null || node.Value == null || _items.Count == 0)
+        {
+            throw new Exception("LinkedList is empty");
+        }
+
+        if (_items.Count > 2500)
+        {
+            throw new Exception("LinkedList is too big for memory");
+        }
     }
 }
