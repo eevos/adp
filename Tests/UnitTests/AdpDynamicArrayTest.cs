@@ -18,6 +18,26 @@ public class AdpDynamicArrayTest
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void Pop_CheckIfArrayShrinks_WhenMultipleItemsAreRemoved<T>(T[] values)
+    {
+        var sut = new AdpDynamicArray<T>();
+        foreach (var value in values)
+        {
+            sut.Add(value);
+        }
+        var length = sut.Count();
+        
+        foreach (var value in values)
+        {
+            sut.RemoveAt(0);
+        }
+        
+        if (length == 0) return;
+        Assert.True(sut.Count() < length);
+    }
+
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Push_CheckIfItemsAreEqual_WhenMultipleItemsArePushed<T>(T[] values)
     {
         var sut = new AdpDynamicArray<T>();
@@ -29,8 +49,7 @@ public class AdpDynamicArrayTest
 
         Assert.Equal(values, sut.ToArray());
     }
-
-
+    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void Pop_CheckCountMinus1_WhenLastItemIsRemoved<T>(T[] values)
