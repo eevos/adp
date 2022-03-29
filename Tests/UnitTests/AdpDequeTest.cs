@@ -2,8 +2,6 @@
 using Algorithms.Algorithms;
 using Tests.DataSets;
 using Xunit;
-using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace Tests.UnitTests;
 
