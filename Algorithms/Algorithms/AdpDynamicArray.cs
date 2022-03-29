@@ -3,20 +3,12 @@ using Algorithms.Interfaces;
 
 namespace Algorithms;
 
-public class AdpDynamicArray<T> : IAdpDynamicArray<T>
+public class AdpDynamicArray<T> : IEnumerable
 {
-    T?[] _items;
-    int _size;
+    private T?[] _items;
+    private int _size;
 
-    public int ListCapacity
-    {
-        get { return _items.Length; }
-    }
-
-    public int Count()
-    {
-        return _size;
-    }
+    public int ListCapacity => _items.Length;
 
     public AdpDynamicArray()
     {
@@ -24,18 +16,17 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         _size = 0;
     }
 
-    public AdpDynamicArray(int capacity)
+    public AdpDynamicArray(IEnumerable<T> values)
     {
-        _items = new T[capacity];
-        _size = capacity;
-    }
-
-    public AdpDynamicArray(IEnumerable<T> collection)
-    {
-        _items = collection.ToArray();
+        _items = values.ToArray();
         _size = _items.Length;
     }
     
+    public int Count()
+    {
+        return _size;
+    }
+
     public void Add(T item)
     {
         Grow(_size + 1);
@@ -43,11 +34,11 @@ public class AdpDynamicArray<T> : IAdpDynamicArray<T>
         _size++;
     }
     
-    public void Add(T[] collection)
+    public void Add(T[] values)
     {
-        Grow(_size + collection.Length);
-        Array.Copy(collection, 0, _items, _size, collection.Length);
-        _size += collection.Length;
+        Grow(_size + values.Length);
+        Array.Copy(values, 0, _items, _size, values.Length);
+        _size += values.Length;
     }
 
     public T Pop()
