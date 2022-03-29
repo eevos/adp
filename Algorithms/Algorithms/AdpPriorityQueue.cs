@@ -3,12 +3,8 @@ using System.Collections;
 
 public class AdpPriorityQueue<T> //: ErrorCheck
 {
-    private List<T> _items;
-
-    public AdpPriorityQueue()
-    {
-        
-    }
+    private readonly List<T> _items;
+    
     public AdpPriorityQueue(IEnumerable<T> items)
     {
         _items = new List<T>(items);
@@ -25,10 +21,7 @@ public class AdpPriorityQueue<T> //: ErrorCheck
         {
             ErrorCheck(_items[0]);
         }
-        else
-        {
-            ErrorCheck();
-        }
+        
         SortQueue();
         return _items[0]; 
     }
@@ -37,7 +30,7 @@ public class AdpPriorityQueue<T> //: ErrorCheck
         ErrorCheck();
 
         var firstItem = Peek(); 
-        _items.RemoveAt(0);
+        _items.RemoveAt(0); // remove from front
         return firstItem;
     }
     private void SortQueue()
