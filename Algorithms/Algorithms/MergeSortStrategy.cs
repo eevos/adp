@@ -1,198 +1,50 @@
-﻿using System.Collections;
-using System.Linq.Expressions;
+﻿namespace Algorithms.Algorithms;
 
-namespace Algorithms.Algorithms;
-
-public class MergeSortStrategy<T>//where T : IComparable
+public class MergeSortStrategy<T> 
 {
-    public MergeSortStrategy()
+    //php-example from rosettacode
+    public List<T> MergeSort(List<T> values)
     {
-    }
-// public int[] MergeSort(int[] array)
-//     {
-//         int[] left;
-//         int[] right;
-//         int[] result = new int[array.Length];
-//         if (array.Length <= 1) return array;
-//         var mid = array.Length / 2;
-//         left = new int[mid];
-//         
-//         if (array.Length % 2 == 0)
-//             right = new int[mid];
-//         else
-//             right = new int[mid + 1];
-//         for (var i = 0; i < mid; i++)
-//             left[i] = array[i];
-//         var x = 0;
-//         for (var i = mid; i < array.Length; i++)
-//         {
-//             right[x] = array[i];
-//             x++;
-//         }
-//         left = MergeSort(left);
-//         right = MergeSort(right);
-//         result = Merge(left, right);
-//         return result;
-//     }
-//     
-//     private static int[] Merge(int[] left, int[] right)
-//     {
-//         int[] result = new int[right.Length + left.Length];
-//         var iResult = 0;
-//         var iRight = 0;
-//         var iLeft = 0;
-//         while (iLeft < left.Length && iRight < right.Length)
-//         {
-//             if (left[iLeft].CompareTo(right[iRight]) >= 0)
-//             {
-//                 result[iResult] = right[iRight];
-//                 iRight++;
-//             }
-//             else
-//             {
-//                 result[iResult] = left[iLeft];
-//                 iLeft++;
-//             }
-//             iResult++;
-//         }
-//         while (iLeft < left.Length)
-//         {
-//             result[iResult] = left[iLeft];
-//             iLeft++;
-//             iResult++;
-//         }
-//         while (iRight < right.Length)
-//         {
-//             result[iResult] = right[iRight];
-//             iRight++;
-//             iResult++;
-//         }
-//         return result;
-//     }
-//     
-    public T[] MergeSort(T[] array)
-    {
-        T[] left;
-        T[] right;
-        T[] result = new T[array.Length];
-        if (array.Length <= 1) return array;
-        var mid = array.Length / 2;
-        left = new T[mid];
-        
-        if (array.Length % 2 == 0)
-            right = new T[mid];
-        else
-            right = new T[mid + 1];
-        for (var i = 0; i < mid; i++)
-            left[i] = array[i];
-        var x = 0;
-        for (var i = mid; i < array.Length; i++)
-        {
-            right[x] = array[i];
-            x++;
-        }
+        if (values.Count <= 1) return values; // base
+
+        var mid = values.Count / 2;
+        var left = values.GetRange(0, mid);
+        var right = values.GetRange(mid, values.Count - mid);
+
         left = MergeSort(left);
         right = MergeSort(right);
-        result = Merge(left, right);
+        var result = Merge(left, right);
+ 
         return result;
     }
-    
-    private static T[] Merge(T[] left, T[] right)
+
+    private static List<T> Merge(List<T> left, List<T> right)
     {
-        T[] result = new T[right.Length + left.Length];
-        var iResult = 0;
-        var iRight = 0;
-        var iLeft = 0;
+        List<T> result = new List<T>();
         var comparer = Comparer<T>.Default;
 
-        while (iLeft < left.Length && iRight < right.Length)
+        while (left.Count > 0 & right.Count > 0)
         {
-            if (comparer.Compare(left[iLeft], right[iRight]) >= 0)
+            if (comparer.Compare(left[0], right[0]) > 0)
             {
-                result[iResult] = right[iRight];
-                iRight++;
+                result.Add(right[0]);
+                right.RemoveAt(0);
             }
             else
             {
-                result[iResult] = left[iLeft];
-                iLeft++;
+                result.Add(left[0]);
+                left.RemoveAt(0);
             }
-            iResult++;
         }
-        while (iLeft < left.Length)
+        while (left.Count > 0)
         {
-            result[iResult] = left[iLeft];
-            iLeft++;
-            iResult++;
+            result.Add(left[0]);
+            left.RemoveAt(0);
         }
-        while (iRight < right.Length)
+        while (right.Count > 0)
         {
-            result[iResult] = right[iRight];
-            iRight++;
-            iResult++;
-        }
-        return result;
-    }
-    
-    public List<T> MergeSort(List<T> array)
-    {
-        List<T> left;
-        List<T> right;
-        List<T> result = new List<T>();
-        if (array.Count <= 1) return array;
-        var mid = array.Count / 2;
-        left = new List<T>();
-        
-        if (array.Count % 2 == 0)
-            right = new List<T>();
-        else
-            right = new List<T>();
-        for (var i = 0; i < mid; i++)
-            left[i] = array[i];
-        var x = 0;
-        for (var i = mid; i < array.Count; i++)
-        {
-            right[x] = array[i];
-            x++;
-        }
-        left = MergeSort(left);
-        right = MergeSort(right);
-        result = Merge(left, right);
-        return result;
-    }
-    
-    private List<T> Merge(List<T> left, List<T> right)
-    {
-        List<T> result = new List<T>();
-        var iResult = 0;
-        var iRight = 0;
-        var iLeft = 0;
-        var comparer = Comparer<T>.Default;
-        while (iLeft < left.Count && iRight < right.Count)
-        {
-            if (comparer.Compare(left[iLeft], right[iRight]) >= 0)
-            {
-                result[iResult] = right[iRight];
-                iRight++;
-            }
-            else
-            {
-                result[iResult] = left[iLeft];
-                iLeft++;
-            }
-            iResult++;
-        }
-        while (iLeft < left.Count)
-        {
-            result[iResult] = left[iLeft];
-            iLeft++;
-            iResult++;
-        }
-        while (iRight < right.Count)
-        {
-            result[iResult] = right[iRight];
-            iRight++;
-            iResult++;
+            result.Add(right[0]);
+            right.RemoveAt(0);
         }
         return result;
     }

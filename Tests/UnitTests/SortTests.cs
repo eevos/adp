@@ -2,26 +2,44 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using Algorithms.Algorithms;
-using Tests.DataSets;
+using DataSets;
 using Xunit;
 
-public class SortTests
+public class SortTests : TestHelper
 {
+
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void MergeSort_ShouldReturnSortedList_WithIntList<T>(T[] values)
+    {
+        var sut = new MergeSortStrategy<T>();
+        var expected = new List<T>(values);
+        var actual = new List<T>(values);
+        
+        if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
+            return;
+        }
+        
+        expected.Sort();
+
+        Assert.Equal(expected, sut.MergeSort(actual));
+    }
+
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void QuickSort_ShouldReturnSortedList<T>(T[] values)
     {
         var sut = new QuickSortStrategy<T>();
-
         var expected = values;
+        
         if (typeof(T).Name == "Object")
         {
             Assert.Throws<InvalidOperationException>(() => Array.Sort(expected));
             return;
         }
-
         if (values.Length < 1)
         {
             Assert.Throws<InvalidOperationException>(() => sut.QuickSort(values, 0, values.Length - 1));
