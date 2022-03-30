@@ -6,11 +6,23 @@ using Algorithms.Algorithms;
 using Tests.DataSets;
 using Xunit;
 
-public class InsertionSortTest
+public class SortTests
 {
+    
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    public void RecursiveInsertionSort_ShouldReturnSortedList<T>(T[] values)
+    public void SelectionSort_ShouldReturnEqual<T>(T[] values)
+    {
+        var sut = new AdpSelectionSort<T>();
+        
+        var expected = new List<T>(values);
+        expected.Sort();        
+        
+        Assert.Equal(expected, sut.Sort(values));
+    }
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsSortDto>))]
+    public void InsertionSortRecursive_ShouldReturnSortedList<T>(T[] values)
     {
         var expected = values;
         if (typeof(T).Name == "Object")
@@ -28,7 +40,7 @@ public class InsertionSortTest
     
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
-    public void RecursiveInsertionSortForLoop_ShouldReturnSortedList<T>(T[] values)
+    public void InsertionSortRecursiveForLoop_ShouldReturnSortedList<T>(T[] values)
     {
         var expected = new List<T>(values);
         
