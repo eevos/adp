@@ -1,0 +1,80 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using Algorithms.Algorithms;
+using Implementations.DataSets;
+using Tests.DataSets;
+using Xunit;
+
+namespace Tests.UnitTests;
+
+public class AdpDijkstraShortestPathTest
+{
+    
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
+    public void DijkstraConstructor_GetAdjacentVertices_ReturnsList(int[,] values)
+    {
+        var matrix = new AdpGraph(values, false);
+        var dijkstraPath = new AdpDijkstraShortestPath(matrix);
+        for (var i = 0; i < matrix.ListNumVertices; i++)
+        {
+            for (var j = 0; j < matrix.ListNumVertices; j++)
+            {
+                if (values[i, j] <= 0) continue;
+                var vertices = dijkstraPath.ListMatrix.GetAdjacentVertices(i).ToList();
+                Assert.NotEmpty(vertices);
+            }
+        }
+    }
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
+    public void DijkstraConstructor_GetAllWeights(int[,] values)
+    {
+        var matrix = new AdpGraph(values, false);
+        var dijkstraPath = new AdpDijkstraShortestPath(matrix);
+
+        var totalWeight = dijkstraPath.ListMatrix.GetAllWeights().Sum();
+
+        Assert.InRange(totalWeight, 1, 999);
+    }
+
+    [Theory]
+    [InlineData(1, 2, 3, 4)]
+    public void SchemeConstructor_Setters_Work(params int[] values)
+    {
+        var scheme = new Scheme(values.ToList());
+        const int distance = 50;
+
+        for (var i = 0; i < scheme.ListVertices.Count; i++)
+        {
+            scheme.ListDistances[i] = distance;
+
+            Assert.Equal(distance, scheme.ListDistances[i]);
+        }
+    }
+
+    [Theory]
+    [InlineData(1, 2, 3, 4)]
+    public void SchemeConstructor_ReturnsValues(params int[] values)
+    {
+        var scheme = new Scheme(values.ToList());
+
+        for (int i = 0; i < scheme.ListVertices.Count; i++)
+        {
+            Assert.Equal(values[i], scheme.ListVertices[i]);
+        }
+    }
+
+    [Theory]
+    [InlineData(1, 2, 3, 4)]
+    public void SchemeConstructor_AddsPrevVertices_AndDistances(params int[] values)
+    {
+        var scheme = new Scheme(values.ToList());
+
+        var countDistances = scheme.ListDistances.Count;
+        var countPreviousVertices = scheme.ListPreviousVertices.Count;
+
+        Assert.Equal(values.Length, countDistances);
+        Assert.Equal(values.Length, countPreviousVertices);
+    }
+}

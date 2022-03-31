@@ -12,20 +12,6 @@ public class AdpGraphTest
 {
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
-    public void DijkstraConstructorTest(int[,] values)
-    {
-        var matrix = new AdpGraph(values, false);
-        var dijkstra = new AdpDijkstraShortestPath(matrix);
-
-        Assert.NotNull(dijkstra);
-
-
-    }
-    // test Scheme
-    
-    
-    [Theory]
-    [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
     public void Constructor_WorksOnLineList(int[][] values)
     {
         var matrix = new AdpGraph(values, false);
