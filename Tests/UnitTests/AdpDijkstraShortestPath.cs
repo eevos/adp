@@ -15,7 +15,7 @@ public class AdpDijkstraShortestPath
         var matrix = ListMatrix;
         var scheme = ListScheme;
         scheme.ListDistances[startVertex] = 0;
-        ListUnVisited = InitializeUnvisited();
+        // ListUnVisited = InitializeUnvisited();
         
         // while vertices remain unvisited
         while (ListUnVisited != null)
@@ -23,7 +23,7 @@ public class AdpDijkstraShortestPath
             // find unvisited vertex with smallest distance (weight)
             var currentVertex = FindUnvisitedVertexWithSmallestDistance(matrix, startVertex);
             
-            // Visit(currentVertex);
+            // Visit(matrix, currentVertex);
                 // and foreach neighbour of current vertex 
                     // calculate distance to startingvertex for each unvisited adjacent vertex
                         // if calculated distance < known distance (Listdistances[adjacentVertex])
@@ -40,28 +40,28 @@ public class AdpDijkstraShortestPath
     private int FindUnvisitedVertexWithSmallestDistance(AdpGraph matrix, int currentV1)
     {
         var verticesToVisit = matrix.GetAdjacentVertices(currentV1).ToList();
-        var sorted = new List<int>();
-
-        for (int i = 0; i < verticesToVisit.Count(); i++)
+        // eerste gewicht wordt minimum
+        var minimum = matrix.GetWeight(currentV1,verticesToVisit[0]);
+        var vertexMinimum = verticesToVisit[0];
+        // als er meer vertices zijn: loop er doorheen en vergelijk gewicht
+        for (var i = 1; i < verticesToVisit.Count(); i++)
         {
-            var minimum = verticesToVisit[0];
-            var indexMinimum = 0;
-            for (int j = 0; j < verticesToVisit.Count; j++)
-            {
-                if (verticesToVisit[j] < minimum)
-                {
-                    minimum = verticesToVisit[j];
-                    indexMinimum = j;
-                }
+            var nextWeight = matrix.GetWeight(currentV1, verticesToVisit[i]); 
+            if (nextWeight < minimum){ 
+                minimum = nextWeight;
+                vertexMinimum = verticesToVisit[i];
             }
-            sorted.Add(minimum);
-            verticesToVisit.RemoveAt(indexMinimum);
+            // sorted.Add(minimum);
+            // verticesToVisit.RemoveAt(indexMinimum);
         }
-
-        var result = verticesToVisit[0];
+        var result = vertexMinimum;
         return result;
     }
-    
+
+    private void Visit(AdpGraph matrix, int vertex)
+    {
+        
+    }
     public List<int>? ListVisited { get; set; }
     public List<int>? ListUnVisited { get; set; }
     public AdpGraph ListMatrix { get; set; }
