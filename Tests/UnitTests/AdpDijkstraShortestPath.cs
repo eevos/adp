@@ -40,9 +40,26 @@ public class AdpDijkstraShortestPath
     private int FindUnvisitedVertexWithSmallestDistance(AdpGraph matrix, int currentV1)
     {
         var verticesToVisit = matrix.GetAdjacentVertices(currentV1).ToList();
+        var sorted = new List<int>();
 
-        var vertexWithSmallestWeight = verticesToVisit[0];
-        return vertexWithSmallestWeight;
+        for (int i = 0; i < verticesToVisit.Count(); i++)
+        {
+            var minimum = verticesToVisit[0];
+            var indexMinimum = 0;
+            for (int j = 0; j < verticesToVisit.Count; j++)
+            {
+                if (verticesToVisit[j] < minimum)
+                {
+                    minimum = verticesToVisit[j];
+                    indexMinimum = j;
+                }
+            }
+            sorted.Add(minimum);
+            verticesToVisit.RemoveAt(indexMinimum);
+        }
+
+        var result = verticesToVisit[0];
+        return result;
     }
     
     public List<int>? ListVisited { get; set; }
