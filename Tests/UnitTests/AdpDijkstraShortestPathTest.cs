@@ -9,7 +9,16 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPathTest
 {
-    
+
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
+    public void FindShortestPath_ReturnsList(int[,] values)
+    {
+        var matrix = new AdpGraph(values, false);
+        var dijkstraPath = new AdpDijkstraShortestPath(matrix);
+        dijkstraPath.FindShortestPath(0);
+    }
+
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
     public void DijkstraConstructor_GetAdjacentVertices_ReturnsList(int[,] values)

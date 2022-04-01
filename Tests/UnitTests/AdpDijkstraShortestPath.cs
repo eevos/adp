@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Algorithms.Algorithms;
 
 namespace Tests.UnitTests;
@@ -8,47 +9,39 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPath
 {
-
-    public List<int> FindShortestPath()
+    public List<int> FindShortestPath(int startVertex)
     {
         var path = new List<int>();
-        var currentVertex = 0;
         var matrix = ListMatrix;
         var scheme = ListScheme;
-        scheme.ListDistances[currentVertex] = 0;
+        scheme.ListDistances[startVertex] = 0;
         ListUnVisited = InitializeUnvisited();
         
-        // find unvisited vertex with smallest distance (weight)
-        var vertexWithSmallestWeight = FindUnvisitedVertexWithSmallestDistance(matrix, currentVertex);
-        
-        // visit that vertex 
-            // calculate distance to startingvertex for each unvisited adjacent vertex
-
-
-            // path = ListUnVisited;
+        // while vertices remain unvisited
+        while (ListUnVisited != null)
+        {
+            // find unvisited vertex with smallest distance (weight)
+            var currentVertex = FindUnvisitedVertexWithSmallestDistance(matrix, startVertex);
+            
+            // Visit(currentVertex);
+                // and foreach neighbour of current vertex 
+                    // calculate distance to startingvertex for each unvisited adjacent vertex
+                        // if calculated distance < known distance (Listdistances[adjacentVertex])
+                            //update shortest distance to the adjacent vertex
+                            //update the previous vertex with the current vertex
+                // end foreach
+            ListVisited.Add(currentVertex);
+            ListUnVisited.RemoveAt(currentVertex);
+        }
+        // path = ListUnVisited;
         return path;
     }
 
     private int FindUnvisitedVertexWithSmallestDistance(AdpGraph matrix, int currentV1)
     {
-        var vertexWithSmallestWeight = 0;
-        var verticesToVisit = matrix.GetAdjacentVertices(currentV1);
-        var startWeight = 0;
-        var smallestWeight = 0;
-        foreach (var v2 in verticesToVisit)
-        { 
-            // store smallest weight with vertex
-            var currentWeight = matrix.GetWeight(currentV1, v2); 
-            if ( currentWeight > startWeight)
-            {
-                var tempWeight = currentWeight;
-                if (currentWeight < smallestWeight)
-                {
-                    smallestWeight = currentWeight;
-                    vertexWithSmallestWeight = v2;
-                }
-            };
-        }
+        var verticesToVisit = matrix.GetAdjacentVertices(currentV1).ToList();
+
+        var vertexWithSmallestWeight = verticesToVisit[0];
         return vertexWithSmallestWeight;
     }
     
@@ -60,7 +53,7 @@ public class AdpDijkstraShortestPath
     public AdpDijkstraShortestPath(AdpGraph matrix)
     {
         ListMatrix = matrix;
-        // ListUnVisited = InitializeUnvisited();
+        ListUnVisited = InitializeUnvisited();
         ListScheme = InitializeScheme();
     }
     private List<int> InitializeUnvisited()
@@ -89,11 +82,11 @@ public class Scheme
     public Scheme(List<int> vertices)
     {
         ListVertices = vertices;
-        ListDistances = InitializeDistances();
+        ListDistances = InitializeShortestDistances();
         ListPreviousVertices = InitializePreviousVertices();
     }
 
-    private List<int> InitializeDistances()
+    private List<int> InitializeShortestDistances()
     {
         var distances = new List<int>();
         foreach (var vertex in ListVertices)
