@@ -15,24 +15,27 @@ public class AdpDijkstraShortestPath
         var matrix = ListMatrix;
         var scheme = ListScheme;
         scheme.ListDistances[startVertex] = 0;
-        // ListUnVisited = InitializeUnvisited();
+
+        //Start met de eerste vertex
+        Visit(matrix, startVertex);
+        var currentVertex = FindUnvisitedVertexWithSmallestDistance(matrix, startVertex);
         
-        // while vertices remain unvisited
-        while (ListUnVisited != null)
-        {
-            // find unvisited vertex with smallest distance (weight)
-            var currentVertex = FindUnvisitedVertexWithSmallestDistance(matrix, startVertex);
-            
-            // Visit(matrix, currentVertex);
-                // and foreach neighbour of current vertex 
-                    // calculate distance to startingvertex for each unvisited adjacent vertex
-                        // if calculated distance < known distance (Listdistances[adjacentVertex])
-                            //update shortest distance to the adjacent vertex
-                            //update the previous vertex with the current vertex
-                // end foreach
-            ListVisited.Add(currentVertex);
-            ListUnVisited.RemoveAt(currentVertex);
-        }
+            // while vertices remain unvisited
+            while (ListUnVisited != null)
+            {
+                Visit(matrix, currentVertex);
+                // find unvisited vertex with smallest distance (weight)
+                currentVertex = FindUnvisitedVertexWithSmallestDistance(matrix, startVertex);
+
+                // Visit(matrix, currentVertex);
+                    // and foreach neighbour of current vertex 
+                        // calculate distance to startingvertex for each unvisited adjacent vertex
+                            // if calculated distance < known distance (Listdistances[adjacentVertex])
+                                //update shortest distance to the adjacent vertex
+                                //update the previous vertex with the current vertex
+                    // end foreach
+            }
+        
         // path = ListUnVisited;
         return path;
     }
@@ -40,8 +43,17 @@ public class AdpDijkstraShortestPath
     private int FindUnvisitedVertexWithSmallestDistance(AdpGraph matrix, int currentV1)
     {
         var verticesToVisit = matrix.GetAdjacentVertices(currentV1).ToList();
+        // remove visitedVertices from verticesToVisit
+        foreach (var vertex in verticesToVisit)
+        {
+            if (ListVisited.Contains(vertex))
+            {
+                verticesToVisit.RemoveAll(x => x == vertex);
+            }
+        }
         // eerste gewicht wordt minimum
-        var minimum = matrix.GetWeight(currentV1,verticesToVisit[0]);
+        // var minimum = matrix.GetWeight(currentV1,verticesToVisit[0]);
+        var minimum = ListScheme.ListDistances[verticesToVisit[0]];
         var vertexMinimum = verticesToVisit[0];
         // als er meer vertices zijn: loop er doorheen en vergelijk gewicht
         for (var i = 1; i < verticesToVisit.Count(); i++)
@@ -51,16 +63,29 @@ public class AdpDijkstraShortestPath
                 minimum = nextWeight;
                 vertexMinimum = verticesToVisit[i];
             }
-            // sorted.Add(minimum);
-            // verticesToVisit.RemoveAt(indexMinimum);
         }
         var result = vertexMinimum;
         return result;
     }
-
-    private void Visit(AdpGraph matrix, int vertex)
+    private void Visit(AdpGraph matrix, int currentVertex)
     {
-        
+        var verticesToVisit = matrix.GetAdjacentVertices(currentVertex).ToList();
+        foreach (var vertexToVisit in verticesToVisit)
+        {
+            if (!ListUnVisited.Contains(vertexToVisit))
+            {
+                // if (ListVisited.Contains(vertexToVisit)) continue;
+                var distance = matrix.GetWeight(currentVertex, vertexToVisit);
+                var calculatedDistanceToStartVertex = distance + ListScheme.ListDistances[currentVertex];
+                if (calculatedDistanceToStartVertex < ListScheme.ListDistances[vertexToVisit])
+                {
+                    ListScheme.ListDistances[vertexToVisit] = calculatedDistanceToStartVertex;
+                    ListScheme.ListPreviousVertices[vertexToVisit] = currentVertex;
+                }
+            }
+        }
+        ListUnVisited.RemoveAll(x => x == currentVertex);
+        ListVisited.Add(currentVertex);        
     }
     public List<int>? ListVisited { get; set; }
     public List<int>? ListUnVisited { get; set; }
@@ -108,7 +133,7 @@ public class Scheme
         var distances = new List<int>();
         foreach (var vertex in ListVertices)
         {
-            distances.Add(-1);
+            distances.Add(9999);
         }
         return distances;
     }    
