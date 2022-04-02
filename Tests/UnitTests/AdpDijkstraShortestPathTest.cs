@@ -9,14 +9,33 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPathTest
 {
-
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
-    public void FindShortestPath_ReturnsList(int[,] values)
+    public void FindPath_Works(int[,] values)
     {
         var matrix = new AdpGraph(values, false);
         var dijkstraPath = new AdpDijkstraShortestPath(matrix);
         dijkstraPath.FindShortestPath(0);
+
+        // Assert.Equal(actualVertex, expectedVertex);
+    }
+
+    [Theory]
+    [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
+    public void FindUnvisitedVertexWithSmallestDistance_ReturnsCorrectStartVertex(int[,] values)
+    {
+        var matrix = new AdpGraph(values, false);
+
+        for (int i = 0; i < matrix.ListNumVertices; i++)
+        {
+            var dijkstraPath = new AdpDijkstraShortestPath(matrix);
+            var expectedVertex = i;
+
+            dijkstraPath.FindShortestPath(expectedVertex);
+            var actualVertex = dijkstraPath.FindUnvisitedVertexWithSmallestDistance();
+
+            Assert.Equal(actualVertex, expectedVertex);
+        }
     }
 
     [Theory]
@@ -35,6 +54,7 @@ public class AdpDijkstraShortestPathTest
             }
         }
     }
+
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
     public void DijkstraConstructor_GetAllWeights(int[,] values)
