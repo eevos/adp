@@ -15,7 +15,7 @@ public class AdpDijkstraShortestPathTest
     {
         var matrix = new AdpGraph(values, false);
         var dijkstraPath = new AdpDijkstraShortestPath(matrix);
-        dijkstraPath.FindShortestPath(0);
+        dijkstraPath.FindShortestPath(0,4);
 
         // Assert.Equal(actualVertex, expectedVertex);
     }
@@ -31,7 +31,7 @@ public class AdpDijkstraShortestPathTest
             var dijkstraPath = new AdpDijkstraShortestPath(matrix);
             var expectedVertex = i;
 
-            dijkstraPath.FindShortestPath(expectedVertex);
+            dijkstraPath.FindShortestPath(expectedVertex, 4);
             var actualVertex = dijkstraPath.FindUnvisitedVertexWithSmallestDistance();
 
             Assert.Equal(actualVertex, expectedVertex);
@@ -101,7 +101,7 @@ public class AdpDijkstraShortestPathTest
         var scheme = new Scheme(values.ToList());
 
         var countDistances = scheme.ListDistances.Count;
-        var countPreviousVertices = scheme.ListPreviousVertices.Count;
+        var countPreviousVertices = scheme.ListPreviousVertex.Count;
 
         Assert.Equal(values.Length, countDistances);
         Assert.Equal(values.Length, countPreviousVertices);

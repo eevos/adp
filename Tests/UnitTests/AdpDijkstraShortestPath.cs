@@ -9,7 +9,7 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPath
 {
-    public List<int> FindShortestPath(int startVertex)
+    public List<int> FindShortestPath(int startVertex, int destinationVertex)
     {
         var path = new List<int>();
         var matrix = ListMatrix;
@@ -18,52 +18,51 @@ public class AdpDijkstraShortestPath
 
         // var currentVertex = FindUnvisitedVertexWithSmallestDistance();
         var currentVertex = startVertex;
-        ListUnVisited.RemoveAll(x => x == startVertex);
-        ListVisited.Add(startVertex);
-        
-        while (ListUnVisited != null)
+        path.Add(currentVertex);
+        // ListUnVisited.RemoveAll(x => x == startVertex);
+        // ListVisited.Add(startVertex);
+        while (ListUnVisited.Count > 0)
         {
-            var adjacentVertices = matrix.GetAdjacentVertices(currentVertex).ToList();
-            foreach (var adjacentVertex in adjacentVertices)
-            {
-                Visit(matrix, adjacentVertex, currentVertex);
-            }
+            Visit(matrix, currentVertex);
+            // update visited && unvisited
+            ListUnVisited.RemoveAll(x => x == currentVertex);
+            ListVisited.Add(currentVertex);
             currentVertex = FindUnvisitedVertexWithSmallestDistance();
+            path.Add(currentVertex);
         }
+        
         return path;
     }
-    private void Visit(AdpGraph matrix, int vertex, int currentVertex)
+    private void Visit(AdpGraph matrix, int currentVertex)
     {
-        if (ListUnVisited != null && !ListUnVisited.Contains(vertex))
+        var adjacentVertices = matrix.GetAdjacentVertices(currentVertex).ToList();
+        foreach (var adjacentVertex in adjacentVertices)
         {
-            // calculate distance
-            var distanceBetween = ListMatrix.GetWeight(currentVertex, vertex);
-            var distanceCurrentVertex = ListScheme.ListDistances[currentVertex];
-            var calculatedDistanceToStartVertex = distanceBetween + distanceCurrentVertex;
-            if (calculatedDistanceToStartVertex < ListScheme.ListDistances[vertex])
+            if (ListUnVisited != null && ListUnVisited.Contains(currentVertex))
             {
-                ListScheme.ListDistances[vertex] = calculatedDistanceToStartVertex;
-                ListScheme.ListPreviousVertices[vertex] = currentVertex;
+                // calculate distance
+                var distanceBetween = ListMatrix.GetWeight(currentVertex, adjacentVertex);
+                var distanceCurrentVertex = ListScheme.ListDistances[currentVertex]; // 9999 of 0?
+                var calculatedDistanceToStartVertex = distanceBetween + distanceCurrentVertex;
+                if (calculatedDistanceToStartVertex < ListScheme.ListDistances[adjacentVertex])
+                {
+                    ListScheme.ListDistances[adjacentVertex] = calculatedDistanceToStartVertex;
+                    ListScheme.ListPreviousVertex[adjacentVertex] = currentVertex;
+                }
             }
         }
-        // update visited && unvisited
-        ListUnVisited.RemoveAll(x => x == vertex);
-        ListVisited.Add(vertex);
     }
 
     public int FindUnvisitedVertexWithSmallestDistance()
     {
         var tempDistances = ListScheme.ListDistances.ToList();
-        // clean temporary distances
-        for (var i = ListUnVisited.Count-1; i== 0 ; i--)
+        for (var i = 0; i < ListScheme.ListDistances.Count; i++)
         {
-            var item = tempDistances[i];
-            if (ListVisited != null && ListVisited.Contains(item))
+            if (ListVisited.Contains(i) && !ListUnVisited.Contains(i))
             {
-                tempDistances.RemoveAt(i);
+                tempDistances[i] = 9999;
             }
         }
-
         var minimumVertex = tempDistances.IndexOf(tempDistances.Min());
         return minimumVertex;
     }
@@ -113,13 +112,13 @@ public class Scheme
 {
     public List<int> ListVertices { get; set; }
     public List<int> ListDistances { get; set; }
-    public List<int> ListPreviousVertices { get; set; }
+    public List<int> ListPreviousVertex { get; set; }
 
     public Scheme(List<int> vertices)
     {
         ListVertices = vertices;
         ListDistances = InitializeShortestDistances();
-        ListPreviousVertices = InitializePreviousVertices();
+        ListPreviousVertex = InitializePreviousVertices();
     }
 
     private List<int> InitializeShortestDistances()
