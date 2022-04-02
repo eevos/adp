@@ -9,9 +9,20 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPathTest
 {
+    // [Theory]
+    // [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
+    // public void FindPath_Works_Line(int[][] values)
+    // {
+    //     var matrix = new AdpGraph(values, false);
+    //     var dijkstraPath = new AdpDijkstraShortestPath(matrix);
+    //     var expectedPath = new List<int> {6, 5, 4, 2, 0, 4};
+    //     var actualPath = dijkstraPath.FindShortestPath(0, 6);
+    //     Assert.Equal(expectedPath, actualPath);
+    // }
+
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
-    public void FindPath_Works(int[,] values)
+    public void FindPath_Works_Matrix(int[,] values)
     {
         var matrix = new AdpGraph(values, false);
         var dijkstraPath = new AdpDijkstraShortestPath(matrix);
@@ -24,7 +35,7 @@ public class AdpDijkstraShortestPathTest
         }
         else
         {
-            var expectedPath = new List<int> {4,1,0,149};
+            var expectedPath = new List<int> {4, 1, 0, 149};
             var actualPath = dijkstraPath.FindShortestPath(0, 4);
             Assert.Equal(expectedPath, actualPath);
         }
@@ -36,16 +47,19 @@ public class AdpDijkstraShortestPathTest
     {
         var matrix = new AdpGraph(values, false);
 
-        for (int i = 0; i < matrix.ListNumVertices; i++)
-        {
-            var dijkstraPath = new AdpDijkstraShortestPath(matrix);
-            var expectedVertex = i;
+        var dijkstraPath = new AdpDijkstraShortestPath(matrix);
 
-            dijkstraPath.FindShortestPath(expectedVertex, 4);
-            var actualVertex = dijkstraPath.FindUnvisitedVertexWithSmallestDistance();
+        // add a vertex with a very low value
+        dijkstraPath.ListScheme.ListDistances[1] = -10;
+        // now add a vertex lower than the first
+        dijkstraPath.ListScheme.ListDistances[2] = -15;
+        // but now disqualify that vertex
+        dijkstraPath.ListUnVisited.RemoveAll(x => x == 2);
+        dijkstraPath.ListVisited.Add(2);
+        var actualVertex = dijkstraPath.FindUnvisitedVertexWithSmallestDistance();
 
-            Assert.Equal(actualVertex, expectedVertex);
-        }
+        // we should still get vertex 1
+        Assert.Equal(1, actualVertex);
     }
 
     [Theory]
