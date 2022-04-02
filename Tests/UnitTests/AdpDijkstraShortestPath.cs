@@ -9,16 +9,19 @@ namespace Tests.UnitTests;
 
 public class AdpDijkstraShortestPath
 {
+    private int _startVertex;
+    private int _destinationVertex;
     public List<int> FindShortestPath(int startVertex, int destinationVertex)
     {
-        var path = new List<int>();
+        _startVertex = startVertex;
+        _destinationVertex = destinationVertex;
+        
         var matrix = ListMatrix;
         var scheme = ListScheme;
         scheme.ListDistances[startVertex] = 0;
 
         // var currentVertex = FindUnvisitedVertexWithSmallestDistance();
         var currentVertex = startVertex;
-        path.Add(currentVertex);
         // ListUnVisited.RemoveAll(x => x == startVertex);
         // ListVisited.Add(startVertex);
         while (ListUnVisited.Count > 0)
@@ -28,8 +31,24 @@ public class AdpDijkstraShortestPath
             ListUnVisited.RemoveAll(x => x == currentVertex);
             ListVisited.Add(currentVertex);
             currentVertex = FindUnvisitedVertexWithSmallestDistance();
-            path.Add(currentVertex);
         }
+
+        return ConstructPath();
+    }
+
+    private List<int> ConstructPath()
+    {   var path = new List<int>();
+
+        var nextVertex = _destinationVertex;
+        path.Add(_destinationVertex);
+        while (ListScheme.ListPreviousVertex[nextVertex] != _startVertex)
+        {
+            path.Add(ListScheme.ListPreviousVertex[nextVertex]);
+            nextVertex = ListScheme.ListPreviousVertex[nextVertex];
+        }
+        
+        path.Add(_startVertex);
+        path.Add(ListScheme.ListDistances.LastOrDefault());
         
         return path;
     }

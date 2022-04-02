@@ -15,9 +15,19 @@ public class AdpDijkstraShortestPathTest
     {
         var matrix = new AdpGraph(values, false);
         var dijkstraPath = new AdpDijkstraShortestPath(matrix);
-        dijkstraPath.FindShortestPath(0,4);
 
-        // Assert.Equal(actualVertex, expectedVertex);
+        if ((matrix.GetAllWeights().Sum() / matrix.ListNumVertices) / 2 < 2)
+        {
+            var expectedPath = new List<int> {6, 5, 4, 2, 0, 4};
+            var actualPath = dijkstraPath.FindShortestPath(0, 6);
+            Assert.Equal(expectedPath, actualPath);
+        }
+        else
+        {
+            var expectedPath = new List<int> {4,1,0,149};
+            var actualPath = dijkstraPath.FindShortestPath(0, 4);
+            Assert.Equal(expectedPath, actualPath);
+        }
     }
 
     [Theory]
