@@ -5,7 +5,7 @@ namespace Algorithms.Algorithms;
 
 public class AdpGraph
 {
-    public int ListNumVertices { get; }
+    public int ListNumVertices { get; set; }
     public bool ListDirected { get; }
     private readonly int[,] _matrix;
 
@@ -15,11 +15,12 @@ public class AdpGraph
         ListDirected = directed;
         _matrix = matrix;
     }
-    public AdpGraph(int[][] values, bool directed = false)
-    {      
-        ListNumVertices = values.Length;
-        ListDirected = directed;
-        _matrix = new int[values.Length, values.Length];
+
+    public AdpGraph(int[][] values)
+    {        
+        ListNumVertices = GetListNumVerticesFromLine(values);
+        ListDirected = true;
+        _matrix = new int[ListNumVertices, ListNumVertices];
 
         for (var i = 0; i < ListNumVertices; i++)
         {
@@ -33,26 +34,47 @@ public class AdpGraph
             AddEdge(v1, v2, weight);
         }
     }
+
     public AdpGraph(int[][][] values)
     {
         ListNumVertices = values.Length;
         ListDirected = false;
         _matrix = new int[values.Length, values.Length];
-        
+
         for (var i = 0; i < ListNumVertices; i++)
         {
             for (var j = 0; j < values[i].Length; j++)
             {
-                var v1 = i;                 // this is v1: [i]
-                var v2 = values[i][j][0];   // this is v1: [i] [j][0]
+                var v1 = i; // this is v1: [i]
+                var v2 = values[i][j][0]; // this is v1: [i] [j][0]
                 var weight = 1;
                 if (values[i][j].Length > 1)
-                {   if (!ListDirected) ListDirected = true;
+                {
+                    if (!ListDirected) ListDirected = true;
                     weight = values[i][j][1]; // this is an edge: [i] [j][1]
                 }
-                AddEdge(v1, v2, weight); 
+
+                AddEdge(v1, v2, weight);
             }
         }
+    }
+
+    private int GetListNumVerticesFromLine(int[][] values)
+    {
+        var result = 0;
+        // find highest vertex in List for length
+        for (var i = 0; i < values.Length; i++)
+        {
+            for (var j = 0; j < 2; j++)
+            {
+                if (values[i][j] > result)
+                {
+                    result = values[i][j];
+                }
+            }
+        }
+        result += 1;
+        return result;
     }
     public void AddEdge(int v1, int v2, int weight)
     {
@@ -60,6 +82,7 @@ public class AdpGraph
         _matrix[v1, v2] = weight;
         if (!ListDirected) _matrix[v2, v1] = weight;
     }
+
     public IEnumerable<int> GetAdjacentVertices(int vertex)
     {
         var adjacentVertices = new List<int>();
@@ -72,6 +95,7 @@ public class AdpGraph
         }
         return adjacentVertices;
     }
+
     public IEnumerable<int> GetAllWeights()
     {
         var weights = new int[ListNumVertices * ListNumVertices];
@@ -84,13 +108,15 @@ public class AdpGraph
                 k++;
             }
         }
+
         return weights;
     }
+
     public int GetWeight(int v1, int v2)
     {
-        return _matrix[v1, v2]; 
+        return _matrix[v1, v2];
     }
-    
+
     // public void printAllPaths(int s, int d)
     // {
     //     bool[] isVisited = new bool[ListNumVertices];
