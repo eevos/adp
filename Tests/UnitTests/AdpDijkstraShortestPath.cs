@@ -32,7 +32,6 @@ public class AdpDijkstraShortestPath
             ListVisited.Add(currentVertex);
             currentVertex = FindUnvisitedVertexWithSmallestDistance();
         }
-
         return ConstructPath();
     }
 
