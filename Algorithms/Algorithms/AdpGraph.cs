@@ -6,19 +6,19 @@ namespace Algorithms.Algorithms;
 public class AdpGraph
 {
     public int ListNumVertices { get; }
-    private readonly bool _directed;
+    public bool ListDirected { get; }
     private readonly int[,] _matrix;
 
     public AdpGraph(int[,] matrix, bool directed = false)
     {
         ListNumVertices = matrix.GetLength(0);
-        _directed = directed;
+        ListDirected = directed;
         _matrix = matrix;
     }
     public AdpGraph(int[][] values, bool directed = false)
     {      
         ListNumVertices = values.Length;
-        _directed = directed;
+        ListDirected = directed;
         _matrix = new int[values.Length, values.Length];
 
         for (var i = 0; i < ListNumVertices; i++)
@@ -36,7 +36,7 @@ public class AdpGraph
     public AdpGraph(int[][][] values)
     {
         ListNumVertices = values.Length;
-        _directed = false;
+        ListDirected = false;
         _matrix = new int[values.Length, values.Length];
         
         for (var i = 0; i < ListNumVertices; i++)
@@ -47,7 +47,7 @@ public class AdpGraph
                 var v2 = values[i][j][0];   // this is v1: [i] [j][0]
                 var weight = 1;
                 if (values[i][j].Length > 1)
-                {   if (!_directed) _directed = true;
+                {   if (!ListDirected) ListDirected = true;
                     weight = values[i][j][1]; // this is an edge: [i] [j][1]
                 }
                 AddEdge(v1, v2, weight); 
@@ -58,7 +58,7 @@ public class AdpGraph
     {
         if (weight < 1) throw new ArgumentException("Weight of an Edge cannot be less than 1");
         _matrix[v1, v2] = weight;
-        if (!_directed) _matrix[v2, v1] = weight;
+        if (!ListDirected) _matrix[v2, v1] = weight;
     }
     public IEnumerable<int> GetAdjacentVertices(int vertex)
     {
