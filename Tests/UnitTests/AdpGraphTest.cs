@@ -22,7 +22,7 @@ public class AdpGraphTest
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
     public void Constructor_WorksOnList(int[][][] values)
     {
-        var matrix = new AdpGraph(values, true);
+        var matrix = new AdpGraph(values);
 
         Assert.NotNull(matrix);
     }
@@ -72,7 +72,7 @@ public class AdpGraphTest
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
     public void GraphList_GetAdjacentVertices_ReturnsList(int[][][] values)
     {
-        var matrix = new AdpGraph(values, false);
+        var matrix = new AdpGraph(values);
         for (var i = 0; i < matrix.ListNumVertices; i++)
         {
             var adjacentVertices = matrix.GetAdjacentVertices(i);

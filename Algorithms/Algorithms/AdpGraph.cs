@@ -33,10 +33,10 @@ public class AdpGraph
             AddEdge(v1, v2, weight);
         }
     }
-    public AdpGraph(int[][][] values, bool directed = false)
+    public AdpGraph(int[][][] values)
     {
         ListNumVertices = values.Length;
-        _directed = directed;
+        _directed = false;
         _matrix = new int[values.Length, values.Length];
         
         for (var i = 0; i < ListNumVertices; i++)
@@ -47,7 +47,7 @@ public class AdpGraph
                 var v2 = values[i][j][0];   // this is v1: [i] [j][0]
                 var weight = 1;
                 if (values[i][j].Length > 1)
-                {
+                {   if (!_directed) _directed = true;
                     weight = values[i][j][1]; // this is an edge: [i] [j][1]
                 }
                 AddEdge(v1, v2, weight); 
