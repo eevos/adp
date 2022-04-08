@@ -48,67 +48,45 @@ public class AdpGraphTest
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphLineDto>))]
-    public void GraphLine_GetAdjacentVertices_ReturnsList(int[][] values)
+    public void GraphLine_GetAdjacentVertices_ReturnsList_WithWeightedVertices(int[][] values)
     {
         var matrix = new AdpGraph(values);
-        for (var i = 0; i < matrix.ListNumVertices; i++)
+
+        // We know that any vertex has at least 1 adjacent vertex except for the last in a directed matrix
+        for (var i = 0; i < matrix.ListNumVertices-1; i++)
         {
-            var adjacentVertices = matrix.GetAdjacentVertices(i);
-            var anyAboveZero = adjacentVertices.Count(x => x > 0);
-            if (matrix.GetAllWeights().Sum() > matrix.ListNumVertices)
-            {
-                // except for some vertices in a weighted matrix 
-                Assert.InRange(anyAboveZero, 0, matrix.ListNumVertices);
-            }
-            else
-            {
-                // We know that any vertex has at least 1 adjacent vertex 
-                Assert.InRange(anyAboveZero, 1, matrix.ListNumVertices);
-            }
+            var adjacentVertices = matrix.GetAdjacentVertices(1);
+            var countWeightedVertices = adjacentVertices.Count(vertexWeight => vertexWeight > 0);
+            Assert.InRange(countWeightedVertices, 1, matrix.ListNumVertices);
         }
     }
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphListDto>))]
-    public void GraphList_GetAdjacentVertices_ReturnsList(int[][][] values)
+    public void GraphList_GetAdjacentVertices_ReturnsList_WithWeightedVertices(int[][][] values)
     {
         var matrix = new AdpGraph(values);
-        for (var i = 0; i < matrix.ListNumVertices; i++)
+        // We know that any vertex has at least 1 adjacent vertex except for the last in a directed matrix
+        for (var i = 0; i < matrix.ListNumVertices-1; i++)
         {
             var adjacentVertices = matrix.GetAdjacentVertices(i);
-            var anyAboveZero = adjacentVertices.Count(x => x > 0);
-            if (matrix.GetAllWeights().Sum() > matrix.ListNumVertices)
-            {
-                // except for some vertices in a weighted matrix 
-                Assert.InRange(anyAboveZero, 0, matrix.ListNumVertices);
-            }
-            else
-            {
-                // We know that any vertex has at least 1 adjacent vertex 
-                Assert.InRange(anyAboveZero, 1, matrix.ListNumVertices);
-            }
+            var countWeightedVertices = adjacentVertices.Count(vertexWeight => vertexWeight > 0);
+            Assert.InRange(countWeightedVertices, 1, matrix.ListNumVertices);
         }
     }
 
     [Theory]
     [ClassData(typeof(DataSetLoader<DsGraphMatrixDto>))]
-    public void GraphMatrix_GetAdjacentVertices_ReturnsList(int[,] values)
+    public void GraphMatrix_GetAdjacentVertices_ReturnsList_WithWeightedVertices(int[,] values)
     {
         var matrix = new AdpGraph(values, false);
-        for (var i = 0; i < matrix.ListNumVertices; i++)
+        // We know that any vertex has at least 1 adjacent vertex except for the last in a directed matrix
+        for (var i = 0; i < matrix.ListNumVertices-1; i++)
         {
             var adjacentVertices = matrix.GetAdjacentVertices(i);
-            var anyAboveZero = adjacentVertices.Count(x => x > 0);
-            if (matrix.GetAllWeights().Sum() > matrix.ListNumVertices)
-            {
-                // except for some vertices in a weighted matrix 
-                Assert.InRange(anyAboveZero, 0, matrix.ListNumVertices);
-            }
-            else
-            {
-                // We know that any vertex has at least 1 adjacent vertex 
-                Assert.InRange(anyAboveZero, 1, matrix.ListNumVertices);
-            }
+            var countWeightedVertices = adjacentVertices.Count(vertexWeight => vertexWeight > 0);
+            Assert.InRange(countWeightedVertices, 1, matrix.ListNumVertices);
+
         }
     }
 
