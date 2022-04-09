@@ -46,6 +46,10 @@ public class AdpPriorityQueueTest : TestHelper
 
             Assert.Throws<Exception>(() => queue.Peek());
         }
+        else if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
+        }
         else
         {
             var queue = new AdpPriorityQueue<T>(values);
@@ -72,6 +76,10 @@ public class AdpPriorityQueueTest : TestHelper
 
             Assert.Throws<Exception>(() => queue.Dequeue());
         }
+        else if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
+        }
         else
         {
             var queue = new AdpPriorityQueue<T>(values);
@@ -88,7 +96,11 @@ public class AdpPriorityQueueTest : TestHelper
     public void Enqueue_ReturnsCount_PlusOne<T>(T[] values)
     {
         var queue = new AdpPriorityQueue<T>(values);
-
+        if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
+            return;
+        }
         var expected = values.Length + 1;
         queue.Enqueue(GetValueForType<T>());
 

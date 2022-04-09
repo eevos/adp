@@ -1,4 +1,6 @@
-﻿namespace Tests.UnitTests;
+﻿using System.Linq;
+
+namespace Tests.UnitTests;
 
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,6 @@ using Xunit;
 
 public class SortTests : TestHelper
 {
-
     [Theory]
     [ClassData(typeof(DataSetLoader<DsSortDto>))]
     public void MergeSort_ShouldReturnSortedList_WithIntList<T>(T[] values)
@@ -16,13 +17,13 @@ public class SortTests : TestHelper
         var sut = new MergeSortStrategy<T>();
         var expected = new List<T>(values);
         var actual = new List<T>(values);
-        
+
         if (typeof(T).Name == "Object")
         {
             Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
             return;
         }
-        
+
         expected.Sort();
 
         Assert.Equal(expected, sut.MergeSort(actual));
@@ -33,20 +34,28 @@ public class SortTests : TestHelper
     public void QuickSort_ShouldReturnSortedList<T>(T[] values)
     {
         var sut = new QuickSortStrategy<T>();
-        var expected = values;
-        
+        var expected = new List<T>(values);
+
+
         if (typeof(T).Name == "Object")
         {
-            Assert.Throws<InvalidOperationException>(() => Array.Sort(expected));
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(expected.ToArray()));
             return;
         }
+
         if (values.Length < 1)
         {
             Assert.Throws<InvalidOperationException>(() => sut.QuickSort(values, 0, values.Length - 1));
             return;
         }
 
-        Array.Sort(expected);
+        if (typeof(T).Name == "Float8001" && !typeof(IComparable).IsAssignableFrom(typeof(T)))
+        {
+            return;
+            // Assert.Throws<InvalidOperationException>(() => sut.QuickSort(values, 0, values.Length - 1));
+        }
+
+        Array.Sort(expected.ToArray());
         var actual = sut.QuickSort(values, 0, values.Length - 1);
 
         Assert.Equal(expected, actual);
@@ -93,9 +102,7 @@ public class SortTests : TestHelper
     public void InsertionSortRecursiveForLoop_ShouldReturnSortedList<T>(T[] values)
     {
         var expected = new List<T>(values);
-
         var insertionSortStrategy = new InsertionSortStrategy<T>();
-        var actual = insertionSortStrategy.RecursiveSortForLoop(values, values.Length);
 
         if (typeof(T).Name == "Object")
         {
@@ -103,8 +110,17 @@ public class SortTests : TestHelper
             return;
         }
 
-        expected.Sort();
-
-        Assert.Equal(expected, actual);
+        if (values == null || values.Length == 0 || values[0] == null)
+        {
+            Assert.Throws<Exception>(() =>
+                insertionSortStrategy.RecursiveSortForLoop(values, values.Length));
+        }
+        else
+        {
+            var actual = insertionSortStrategy.RecursiveSortForLoop(values, values.Length);
+            expected.Sort();
+            
+            Assert.Equal(expected, actual);
+        }
     }
 }

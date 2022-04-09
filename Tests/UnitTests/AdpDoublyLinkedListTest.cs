@@ -23,9 +23,9 @@ public class AdpDoublyLinkedList
         {
             var sut = new AdpDoublyLinkedList<T>(values);
             var expected = sut.Get(1);
-            
+
             sut.RemoveAt(1);
-            
+
             Assert.False(sut.Contains(expected));
         }
     }
@@ -40,6 +40,10 @@ public class AdpDoublyLinkedList
             var item = GetValueForType<T>();
 
             Assert.Throws<Exception>(() => sut.Remove(item));
+        }
+        else if (typeof(T).Name == "Object")
+        {
+            Assert.Throws<InvalidOperationException>(() => Array.Sort(values));
         }
         else
         {
@@ -83,7 +87,7 @@ public class AdpDoublyLinkedList
             Assert.Throws<Exception>(() => sut.Get(1));
         }
 
-        else  //if (values.Length > 0 || values[0] != null)
+        else //if (values.Length > 0 || values[0] != null)
         {
             var sut = new AdpDoublyLinkedList<T>(values);
             var expected = sut.Get(1); // just take an item
