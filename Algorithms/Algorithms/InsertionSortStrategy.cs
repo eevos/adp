@@ -32,9 +32,9 @@ public class InsertionSortStrategy<T>
     public T[] RecursiveSortForLoop(T[] array, int iterator)
     {
 
-        if (array is null)
+        if (array is null || array.Length == 0 || array[0] == null)
         {
-            throw new InvalidOperationException("Array is not allowed to be null.");
+            throw new Exception("Array is not allowed to be null.");
         }
         
         if (iterator < 1) 
@@ -45,13 +45,8 @@ public class InsertionSortStrategy<T>
         int j = iterator - 2;
 
         var comparer = Comparer<T>.Default;
-        //     while (j >= 0 && comparer.Compare(array[j],last) > 0)
-        // {
-        //     array[j+1] = array[j];
-        //     j--;
-        // }
-        // array[j + 1] = last;
-        if (j >= 0)
+
+        if (j > 0)
         {
             for (int i = j; comparer.Compare(array[j], last) > 0; i--)
             {
