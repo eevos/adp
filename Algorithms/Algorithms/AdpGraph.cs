@@ -22,7 +22,7 @@ public class AdpGraph
         ListDirected = true;
         _matrix = new int[ListNumVertices, ListNumVertices];
 
-        for (var i = 0; i < ListNumVertices; i++)
+        for (var i = 0; i < ListNumVertices + 1; i++)
         {
             var weight = 1;
             var v1 = values[i][0];
