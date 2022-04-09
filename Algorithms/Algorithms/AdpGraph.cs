@@ -116,48 +116,4 @@ public class AdpGraph
     {
         return _matrix[v1, v2];
     }
-
-    // public void printAllPaths(int s, int d)
-    // {
-    //     bool[] isVisited = new bool[ListNumVertices];
-    //     List<int> pathList = new List<int>();
-    //
-    //     pathList.Add(s);
-    //
-    //     printAllPathsUtil(s, d, isVisited, pathList);
-    // }
-
-    // private void printAllPathsUtil(int u, int d, bool[] isVisited, List<int> localPathList)
-    // {
-    //     if (u.Equals(d))
-    //     {
-    //         Console.WriteLine(string.Join(" ", localPathList));
-    //         // if match found then no need
-    //         // to traverse more till depth
-    //         return;
-    //     }
-    //
-    //     // Mark the current node
-    //     isVisited[u] = true;
-    //     // Recur for all the vertices adjacent to current vertex
-    //     for (var i = 0; i < ListNumVertices; i++)
-    //     {
-    //         for (var j = 0; j < ListNumVertices; j++)
-    //         {
-    //             if (!isVisited[i])
-    //             {
-    //                 // store current node in path[]
-    //                 localPathList.Add(i);
-    //                 printAllPathsUtil(i, d, isVisited,
-    //                     localPathList);
-    //
-    //                 // remove current node in path[]
-    //                 localPathList.Remove(i);
-    //             }
-    //         }
-    //     }
-    //
-    //     // Mark the current node
-    //     isVisited[u] = false;
-    // }
 }
