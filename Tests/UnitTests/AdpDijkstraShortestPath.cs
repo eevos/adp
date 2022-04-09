@@ -11,19 +11,17 @@ public class AdpDijkstraShortestPath
 {
     private int _startVertex;
     private int _destinationVertex;
+
     public List<int> FindShortestPath(int startVertex, int destinationVertex)
     {
         _startVertex = startVertex;
         _destinationVertex = destinationVertex;
-        
+
         var matrix = ListMatrix;
         var scheme = ListScheme;
         scheme.ListDistances[startVertex] = 0;
-
-        // var currentVertex = FindUnvisitedVertexWithSmallestDistance();
         var currentVertex = startVertex;
-        // ListUnVisited.RemoveAll(x => x == startVertex);
-        // ListVisited.Add(startVertex);
+
         while (ListUnVisited.Count > 0)
         {
             Visit(matrix, currentVertex);
@@ -32,11 +30,13 @@ public class AdpDijkstraShortestPath
             ListVisited.Add(currentVertex);
             currentVertex = FindUnvisitedVertexWithSmallestDistance();
         }
+
         return ConstructPath();
     }
 
     private List<int> ConstructPath()
-    {   var path = new List<int>();
+    {
+        var path = new List<int>();
 
         var nextVertex = _destinationVertex;
         path.Add(_destinationVertex);
@@ -45,12 +45,13 @@ public class AdpDijkstraShortestPath
             path.Add(ListScheme.ListPreviousVertex[nextVertex]);
             nextVertex = ListScheme.ListPreviousVertex[nextVertex];
         }
-        
+
         path.Add(_startVertex);
         path.Add(ListScheme.ListDistances.LastOrDefault());
-        
+
         return path;
     }
+
     private void Visit(AdpGraph matrix, int currentVertex)
     {
         var adjacentVertices = matrix.GetAdjacentVertices(currentVertex).ToList();
@@ -81,8 +82,7 @@ public class AdpDijkstraShortestPath
                 tempDistances[i] = 9999;
             }
         }
-        var minimumVertex = tempDistances.IndexOf(tempDistances.Min());
-        return minimumVertex;
+        return tempDistances.IndexOf(tempDistances.Min());
     }
 
     public List<int>? ListVisited { get; set; }
@@ -106,8 +106,10 @@ public class AdpDijkstraShortestPath
         {
             result.Add(i);
         }
+
         return result;
     }
+
     private List<int> InitializeVisited()
     {
         var result = new List<int>();
@@ -116,6 +118,7 @@ public class AdpDijkstraShortestPath
         {
             result.Add(9999);
         }
+
         return result;
     }
 
